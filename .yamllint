@@ -1,0 +1,10 @@
+extends: default
+
+ignore: |
+  env/armadillo/flux-system/gotk-components.yaml
+  env/armadillo/flux-system/gotk-sync.yaml
+
+rules:
+  document-start: disable
+  line-length: disable
+  comments: disable
