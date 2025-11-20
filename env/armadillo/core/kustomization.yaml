@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ../../../core
   - metallb-ippool.yaml
+  - default-storage-class.yaml
