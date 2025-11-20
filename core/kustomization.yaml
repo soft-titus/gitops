@@ -6,3 +6,4 @@ resources:
   - metrics-server.yaml
   - metallb.yaml
   - traefik.yaml
+  - longhorn.yaml
