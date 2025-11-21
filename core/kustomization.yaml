@@ -7,3 +7,4 @@ resources:
   - metallb.yaml
   - traefik.yaml
   - longhorn.yaml
+  - keda.yaml

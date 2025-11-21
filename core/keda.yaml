@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keda
+  namespace: keda
+spec:
+  chart:
+    spec:
+      chart: keda
+      # version: "2.18.1"
+      version: "2.*"
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: kedacore
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    crds:
+      install: true
+    watchNamespace: ""
+    logging:
+      operator:
+        level: "info"
+      metricServer:
+        level: "0"
+      webhooks:
+        level: "info"
