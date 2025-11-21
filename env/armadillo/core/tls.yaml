@@ -1,0 +1,36 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-armadillo-local
+  namespace: traefik
+spec:
+  secretName: wildcard-armadillo-local-tls
+  duration: 8760h
+  renewBefore: 336h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    rotationPolicy: Always
+  commonName: "*.armadillo.local"
+  dnsNames:
+    - "*.armadillo.local"
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+---
+apiVersion: traefik.io/v1alpha1
+kind: TLSStore
+metadata:
+  name: default
+  namespace: traefik
+spec:
+  defaultCertificate:
+    secretName: wildcard-armadillo-local-tls
