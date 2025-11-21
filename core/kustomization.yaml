@@ -5,6 +5,7 @@ resources:
   - helm-repositories.yaml
   - metrics-server.yaml
   - metallb.yaml
+  - cert-manager.yaml
   - traefik.yaml
   - longhorn.yaml
   - keda.yaml
