@@ -9,7 +9,7 @@ spec:
     spec:
       chart: cert-manager
       # version: "1.19.1"
-      version: "*"
+      version: "1.*"
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
