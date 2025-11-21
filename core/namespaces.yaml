@@ -11,6 +11,13 @@ kind: Namespace
 metadata:
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
+  name: cert-manager
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: traefik
 ---
 apiVersion: v1
