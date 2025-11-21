@@ -31,6 +31,8 @@ spec:
       namespacePolicy: All
       listeners:
         web:
+          port: 8000
+          protocol: HTTP
           namespacePolicy:
             from: All
     deployment:          
