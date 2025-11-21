@@ -53,3 +53,12 @@ metadata:
 spec:
   interval: 5m0s
   url: https://kedacore.github.io/charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: kubernetes-dashboard
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://kubernetes.github.io/dashboard/

@@ -35,5 +35,5 @@ spec:
           protocol: HTTP
           namespacePolicy:
             from: All
-    deployment:          
+    deployment:
       replicas: 1

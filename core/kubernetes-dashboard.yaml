@@ -2,23 +2,20 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: longhorn
-  namespace: longhorn-system
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
 spec:
   chart:
     spec:
-      chart: longhorn
-      # version: "1.10.1"
-      version: "1.*"
+      chart: kubernetes-dashboard
+      # version: "7.14.0"
+      version: "7.*"
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: longhorn
+        name: kubernetes-dashboard
         namespace: flux-system
   upgrade:
     remediation:
       retries: 1
   interval: 1m0s
-  values:
-    persistence:
-      defaultClass: false
