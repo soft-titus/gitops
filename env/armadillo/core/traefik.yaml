@@ -8,6 +8,12 @@ spec:
   values:
     gateway:
       listeners:
+        $patch: replace
+        web:
+          port: 8000
+          protocol: HTTP
+          namespacePolicy:
+            from: All
         websecure:
           port: 8443
           protocol: HTTPS
