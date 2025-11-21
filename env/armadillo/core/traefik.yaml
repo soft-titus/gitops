@@ -8,20 +8,12 @@ spec:
   values:
     gateway:
       listeners:
-        $patch: replace
-        web:
-          port: 8000
-          protocol: HTTP
-          namespacePolicy:
-            from: All
         websecure:
           port: 8443
           protocol: HTTPS
           namespacePolicy:
             from: All
-          tls:
-            enabled: true
-            mode: Terminate
-            certificateRefs:
-              - name: wildcard-armadillo-local-tls
-                namespace: traefik
+          mode: Terminate
+          certificateRefs:
+            - name: wildcard-armadillo-local-tls
+              namespace: traefik
