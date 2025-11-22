@@ -6,5 +6,6 @@ resources:
   - metallb-ippool.yaml
   - tls.yaml
   - default-storage-class.yaml
+  - kubernetes-dashboard-httproute.yaml
 patchesStrategicMerge:
   - traefik.yaml
