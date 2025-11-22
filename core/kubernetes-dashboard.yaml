@@ -19,3 +19,8 @@ spec:
     remediation:
       retries: 1
   interval: 1m0s
+  values:
+    kong:
+      proxy:
+        http:
+          enabled: true
