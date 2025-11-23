@@ -8,9 +8,12 @@ spec:
   values:
     gateway:
       listeners:
+        web:
+          hostname: "*.armadillo.com"
         websecure:
           port: 8443
           protocol: HTTPS
+          hostname: "*.armadillo.com"
           namespacePolicy:
             from: All
           mode: Terminate
