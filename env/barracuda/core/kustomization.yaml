@@ -4,10 +4,10 @@ kind: Kustomization
 resources:
   - ../../../core
   # - metallb-ippool.yaml
-  - tls.yaml
-  - default-storage-class.yaml
+  # - tls.yaml
+  # - default-storage-class.yaml
 patchesStrategicMerge:
-  - traefik.yaml
+  # - traefik.yaml
   - metrics-server.yaml
   - keda.yaml
   - kubernetes-dashboard.yaml
