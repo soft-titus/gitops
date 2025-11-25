@@ -8,3 +8,8 @@ resources:
   - kubernetes-dashboard-httproute.yaml
 patchesStrategicMerge:
   - traefik.yaml
+  - metrics-server.yaml
+  - longhorn.yaml
+  - keda.yaml
+  - helm-repositories.yaml
+  - namespaces.yaml
