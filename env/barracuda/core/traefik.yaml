@@ -1,0 +1,22 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  values:
+    gateway:
+      listeners:
+        web:
+          hostname: "*.barracuda.local"
+        websecure:
+          port: 8443
+          protocol: HTTPS
+          hostname: "*.barracuda.local"
+          namespacePolicy:
+            from: All
+          mode: Terminate
+          certificateRefs:
+            - name: wildcard-barracuda-local-tls
+              namespace: traefik
