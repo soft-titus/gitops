@@ -5,4 +5,3 @@ metadata:
   name: keda
   namespace: keda
 $patch: delete
-
