@@ -5,6 +5,11 @@ metadata:
   name: core-extension
   namespace: flux-system
 spec:
-  path: ./core-extension
+  interval: 10m0s
+  path: ./env/barracuda/core-extension
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   dependsOn:
     - name: core
