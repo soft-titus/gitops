@@ -7,8 +7,6 @@ resources:
   - metrics-server.yaml
   - metallb.yaml
   - cert-manager.yaml
-  - traefik.yaml
   - longhorn.yaml
   - keda.yaml
-  - kubernetes-dashboard.yaml
   - service-accounts.yaml
