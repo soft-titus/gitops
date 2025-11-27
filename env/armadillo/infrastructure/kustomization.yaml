@@ -2,10 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../core
+  - ../../../infrastructure
+  - tls.yaml
 patchesStrategicMerge:
-  - metrics-server.yaml
-  - longhorn.yaml
-  - keda.yaml
+  - traefik.yaml
+  - minio-operator.yaml
   - helm-repositories.yaml
   - namespaces.yaml
