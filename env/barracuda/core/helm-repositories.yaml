@@ -12,10 +12,3 @@ metadata:
   name: kedacore
   namespace: flux-system
 $patch: delete
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: kubernetes-dashboard
-  namespace: flux-system
-$patch: delete

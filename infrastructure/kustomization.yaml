@@ -4,4 +4,6 @@ kind: Kustomization
 resources:
   - namespaces.yaml
   - helm-repositories.yaml
+  - traefik.yaml
+  - kubernetes-dashboard.yaml
   - minio-operator.yaml

@@ -4,9 +4,7 @@ kind: Kustomization
 resources:
   - ../../../core
 patchesStrategicMerge:
-  - traefik.yaml
   - metrics-server.yaml
   - keda.yaml
-  - kubernetes-dashboard.yaml
   - helm-repositories.yaml
   - namespaces.yaml

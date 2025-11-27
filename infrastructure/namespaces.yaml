@@ -4,4 +4,18 @@ kind: Namespace
 metadata:
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
+  name: traefik
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: kubernetes-dashboard
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: minio-operator
