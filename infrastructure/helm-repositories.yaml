@@ -1,5 +1,17 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: envoy-gateway
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: oci://docker.io/envoyproxy/gateway-helm
+  ref:
+    # tag: 1.6.0
+    semver: ">= 1.*"
+---
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: traefik
