@@ -26,7 +26,7 @@ spec:
   interval: 5m0s
   url: oci://quay.io/jetstack/charts/cert-manager
   layerSelector:
-    mediaType: "application/vnd.cncf.helm.chart.layer.v1.tar+gzip"
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
     operation: copy
   ref:
     # tag: 1.19.1
