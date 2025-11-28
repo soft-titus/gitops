@@ -6,8 +6,8 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   parentRefs:
-    - name: traefik-gateway
-      namespace: traefik
+    - name: envoy-gateway
+      namespace: envoy-gateway-system
   hostnames:
     - "kubernetes-dashboard.armadillo.local"
   rules:

@@ -4,19 +4,4 @@ kind: HelmRelease
 metadata:
   name: traefik
   namespace: traefik
-spec:
-  values:
-    gateway:
-      listeners:
-        web:
-          hostname: "*.armadillo.local"
-        websecure:
-          port: 8443
-          protocol: HTTPS
-          hostname: "*.armadillo.local"
-          namespacePolicy:
-            from: All
-          mode: Terminate
-          certificateRefs:
-            - name: wildcard-armadillo-local-tls
-              namespace: traefik
+$patch: delete
