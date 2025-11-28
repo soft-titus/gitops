@@ -6,6 +6,7 @@ resources:
   - tls.yaml
 patchesStrategicMerge:
   - traefik.yaml
+  - envoy-gateway.yaml
   - kubernetes-dashboard.yaml
   - helm-repositories.yaml
   - namespaces.yaml
