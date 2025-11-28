@@ -18,14 +18,16 @@ spec:
   url: https://metallb.github.io/metallb
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
-  name: jetstack
+  name: cert-manager
   namespace: flux-system
 spec:
   interval: 5m0s
-  type: oci
-  url: oci://quay.io/jetstack/charts
+  url: oci://quay.io/jetstack/charts/cert-manager
+  ref:
+    # tag: 1.19.1
+    semver: ">= 1.*"
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository

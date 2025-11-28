@@ -5,16 +5,10 @@ metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
-  chart:
-    spec:
-      chart: cert-manager
-      # version: "1.19.1"
-      version: "1.*"
-      reconcileStrategy: ChartVersion
-      sourceRef:
-        kind: HelmRepository
-        name: jetstack
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager
+    namespace: flux-system
   upgrade:
     remediation:
       retries: 1
