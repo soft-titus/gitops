@@ -8,5 +8,6 @@ patchesStrategicMerge:
   - traefik.yaml
   - envoy-gateway.yaml
   - kubernetes-dashboard.yaml
+  - dragonfly-operator.yaml
   - helm-repositories.yaml
   - namespaces.yaml

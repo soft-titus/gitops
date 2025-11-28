@@ -10,3 +10,9 @@ kind: Namespace
 metadata:
   name: kubernetes-dashboard
 $patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dragonfly-operator-system
+$patch: delete

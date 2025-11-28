@@ -6,5 +6,6 @@ resources:
 patchesStrategicMerge:
   - traefik.yaml
   - minio-operator.yaml
+  - dragonfly-operator.yaml
   - helm-repositories.yaml
   - namespaces.yaml
