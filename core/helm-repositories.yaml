@@ -25,6 +25,8 @@ metadata:
 spec:
   interval: 5m0s
   url: oci://quay.io/jetstack/charts/cert-manager
+  layerSelector:
+    operation: copy
   ref:
     # tag: 1.19.1
     semver: ">= 1.*"
