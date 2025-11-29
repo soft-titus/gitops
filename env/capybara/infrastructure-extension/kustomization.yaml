@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - gateway.yaml
   - dragonfly.yaml
+  - cnpg-cluster.yaml
