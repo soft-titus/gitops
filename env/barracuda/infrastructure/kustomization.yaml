@@ -9,5 +9,6 @@ patchesStrategicMerge:
   - envoy-gateway.yaml
   - kubernetes-dashboard.yaml
   - dragonfly-operator.yaml
+  - cnpg-operator.yaml
   - helm-repositories.yaml
   - namespaces.yaml

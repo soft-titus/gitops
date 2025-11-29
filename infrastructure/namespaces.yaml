@@ -33,3 +33,10 @@ metadata:
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
   name: dragonfly-operator-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: cnpg-system

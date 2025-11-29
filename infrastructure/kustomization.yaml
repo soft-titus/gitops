@@ -9,3 +9,4 @@ resources:
   - kubernetes-dashboard.yaml
   - minio-operator.yaml
   - dragonfly-operator.yaml
+  - cnpg-operator.yaml

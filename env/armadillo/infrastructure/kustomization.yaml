@@ -7,5 +7,6 @@ patchesStrategicMerge:
   - traefik.yaml
   - minio-operator.yaml
   - dragonfly-operator.yaml
+  - cnpg-operator.yaml
   - helm-repositories.yaml
   - namespaces.yaml
