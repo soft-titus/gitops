@@ -30,9 +30,9 @@ spec:
         branch: main
     commit:
       author:
-        email: flux.cd.bot@cluster.local
+        email: flux.cd.bot@cp.br
         name: "Flux CD Bot"
-      messageTemplate: "[Capybara] Automated image update {{ .AutomationObject }}\nFiles:\n{{ range $filename, $_ := .Updated.Files -}}\n- {{ $filename }}\n{{ end -}}\n\nImages:\n{{ range .Updated.Images -}}\n- {{.}}\n{{ end -}} \n"
+      messageTemplate: "[Capybara] Automated image update {{ .AutomationObject }}\nFiles:\n{{ range $filename, $_ := .Changed.Files -}}\n- {{ $filename }}\n{{ end -}}\n\nImages:\n{{ range .Changed.Images -}}\n- {{.}}\n{{ end -}} \n"
     push:
       branch: main
   update:
