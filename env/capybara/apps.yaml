@@ -32,12 +32,29 @@ spec:
       author:
         email: flux.cd.bot@cp.br
         name: "Flux CD Bot"
+      messageTemplateValues:
+        cluster: capybara
       messageTemplate: |
-        [Capybara] Automated image update {{ .AutomationObject }}
+        Flux Automated image update for {{ .Values.cluster }}.
 
-        Images:
-        {{ range .Changed.Images -}}
-        - {{ . }}
+        Automation name: {{ .AutomationObject }}
+
+        Files:
+        {{ range $filename, $_ := .Changed.FileChanges -}}
+        - {{ $filename }}
+        {{ end -}}
+
+        Objects:
+        {{ range $resource, $changes := .Changed.Objects -}}
+        - {{ $resource.Kind | lower }} {{ $resource.Name | lower }}
+          Changes:
+        {{- range $_, $change := $changes }}
+          {{ if contains "5.0.3" $change.NewValue -}}
+            - {{ $change.OldValue }} -> {{ $change.NewValue }}
+          {{ else -}}
+            [skip ci] wrong image
+          {{ end -}}
+        {{ end -}}
         {{ end -}}
 
     push:
