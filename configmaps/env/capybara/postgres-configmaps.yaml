@@ -5,6 +5,6 @@ metadata:
   name: postgres-configmap
   namespace: default
 data:
-  POSTGRES_HOST: "postgres-rw.postgres.svc.cluster.local"
-  POSTGRES_READONLY_HOST: "postgres-ro.postgres.svc.cluster.local"
+  POSTGRES_HOST: "postgres-rw.default.svc.cluster.local"
+  POSTGRES_READONLY_HOST: "postgres-ro.default.svc.cluster.local"
   POSTGRES_PORT: "5432"
