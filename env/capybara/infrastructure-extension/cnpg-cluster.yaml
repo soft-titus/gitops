@@ -3,7 +3,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: postgres
-  namespace: postgres
+  namespace: default
 spec:
   instances: 3
   imageName: ghcr.io/cloudnative-pg/postgresql:18
@@ -23,4 +23,4 @@ spec:
       database: shortener
       owner: shortener
       secret:
-        name: postgres-shortener-secrets
+        name: postgres-secrets
