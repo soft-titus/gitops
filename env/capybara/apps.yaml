@@ -13,3 +13,28 @@ spec:
     name: flux-system
   dependsOn:
     - name: infrastructure-extension
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: flux.cd.bot@cluster.local
+        name: "Flux CD Bot"
+      messageTemplate: "[Capybara] Automated image update {{ .AutomationObject }}\nFiles:\n{{ range $filename, $_ := .Updated.Files -}}\n- {{ $filename }}\n{{ end -}}\n\nImages:\n{{ range .Updated.Images -}}\n- {{.}}\n{{ end -}} \n"
+    push:
+      branch: main
+  update:
+    path: ./env/capybara/apps
+    strategy: Setters
