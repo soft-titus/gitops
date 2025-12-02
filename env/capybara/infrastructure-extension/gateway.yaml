@@ -13,7 +13,7 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     cert-manager.io/cluster-issuer: "selfsigned"
-    cert-manager.io/common-name: "*.capybara.local"
+    cert-manager.io/common-name: "*.cp.br"
     cert-manager.io/duration: "8760h"
     cert-manager.io/renew-before: "336h"
     cert-manager.io/private-key-algorithm: "RSA"
@@ -35,10 +35,10 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "*.capybara.local"
+      hostname: "*.cp.br"
       tls:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: wildcard-capybara-local-tls
+            name: wildcard-cp-br-tls
             namespace: envoy-gateway-system
