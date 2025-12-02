@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - postgres-configmaps.yaml
   - redis-configmaps.yaml
+  - shortener-app-configmap.yaml
