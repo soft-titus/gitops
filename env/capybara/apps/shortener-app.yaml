@@ -96,7 +96,7 @@ spec:
   imageRepositoryRef:
     name: shortener-app
   filterTags:
-    pattern: '.*-dev(\.\d+)?(\.|$)[^\.\n]{0,7}$'
+    pattern: '.*-dev(\-\d+)?(\-|$)[^\-\n]{0,7}$'
   policy:
     semver:
       range: ">= 0.0.0-dev < 2.0.0-dev"
