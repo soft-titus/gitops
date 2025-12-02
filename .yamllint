@@ -3,6 +3,10 @@ extends: default
 ignore: |
   env/armadillo/flux-system/gotk-components.yaml
   env/armadillo/flux-system/gotk-sync.yaml
+  env/barracuda/flux-system/gotk-components.yaml
+  env/barracuda/flux-system/gotk-sync.yaml
+  env/capybara/flux-system/gotk-components.yaml
+  env/capybara/flux-system/gotk-sync.yaml
 
 rules:
   document-start: disable
