@@ -42,3 +42,23 @@ spec:
           - kind: Secret
             name: wildcard-cp-br-tls
             namespace: envoy-gateway-system
+    - name: root-http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "capybara.local"
+    - name: root-https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "cp.br"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-cp-br-tls
+            namespace: envoy-gateway-system
