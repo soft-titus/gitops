@@ -1,4 +1,3 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -16,8 +15,8 @@ spec:
   values:
     fullnameOverride: "shortener-app"
     image:
-      repository: ghcr.io/soft-titus/shortener  # {"$imagepolicy": "flux-system:shortener-app:name"}
-      tag: 0.0.0  # {"$imagepolicy": "flux-system:shortener-app:tag"}
+      repository: ghcr.io/soft-titus/shortener # {"$imagepolicy": "flux-system:shortener-app:name"}
+      tag: 0.0.0-dev-1764585359 # {"$imagepolicy": "flux-system:shortener-app:tag"}
     replicaCount: 2
     resources:
       requests:
