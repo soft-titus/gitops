@@ -8,6 +8,22 @@ spec:
   values:
     gateway:
       listeners:
+        root-web:
+          port: 8000
+          protocol: HTTP
+          hostname: "barracuda.local"
+          namespacePolicy:
+            from: All
+        root-websecure:
+          port: 8443
+          protocol: HTTPS
+          hostname: "barracuda.local"
+          namespacePolicy:
+            from: All
+          mode: Terminate
+          certificateRefs:
+            - name: root-barracuda-local-tls
+              namespace: traefik
         web:
           hostname: "*.barracuda.local"
         websecure:

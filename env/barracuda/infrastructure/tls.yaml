@@ -2,6 +2,26 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: root-barracuda-local
+  namespace: traefik
+spec:
+  secretName: root-barracuda-local-tls
+  duration: 8760h
+  renewBefore: 336h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    rotationPolicy: Always
+  commonName: "barracuda.local"
+  dnsNames:
+    - "barracuda.local"
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
   name: wildcard-barracuda-local
   namespace: traefik
 spec:
@@ -12,7 +32,7 @@ spec:
     algorithm: RSA
     size: 2048
     rotationPolicy: Always
-  commonName: "*.barracuda.local"
+  commonName: "barracuda.local"
   dnsNames:
     - "*.barracuda.local"
   issuerRef:
