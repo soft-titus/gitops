@@ -13,6 +13,8 @@ spec:
       retries: 1
   interval: 1m0s
   values:
+    annotations:
+      reloader.stakater.com/auto: "true"
     fullnameOverride: "shortener-app"
     image:
       repository: ghcr.io/soft-titus/shortener # {"$imagepolicy": "flux-system:shortener-app:name"}
