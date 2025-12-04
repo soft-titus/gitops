@@ -16,7 +16,7 @@ spec:
     fullnameOverride: "shortener-app"
     image:
       repository: ghcr.io/soft-titus/shortener # {"$imagepolicy": "flux-system:shortener-app:name"}
-      tag: 0.0.0-dev-1764585359 # {"$imagepolicy": "flux-system:shortener-app:tag"}
+      tag: 0.0.0-dev-1764585359-dev-1764662456-dev-1764675599-dev-1764775558-dev-1764865049-dev-1764865256 # {"$imagepolicy": "flux-system:shortener-app:tag"}
     replicaCount: 2
     resources:
       requests:
