@@ -58,3 +58,12 @@ metadata:
 spec:
   interval: 5m0s
   url: https://cloudnative-pg.github.io/charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: stakater
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://stakater.github.io/stakater-charts

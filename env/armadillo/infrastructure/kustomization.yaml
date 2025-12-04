@@ -8,5 +8,6 @@ patchesStrategicMerge:
   - minio-operator.yaml
   - dragonfly-operator.yaml
   - cnpg-operator.yaml
+  - reloader.yaml
   - helm-repositories.yaml
   - namespaces.yaml

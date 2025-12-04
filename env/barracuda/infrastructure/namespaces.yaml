@@ -24,3 +24,11 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   name: cnpg-system
 $patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: reloader
+$patch: delete

@@ -26,3 +26,10 @@ metadata:
   name: cnpg
   namespace: flux-system
 $patch: delete
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: stakater
+  namespace: flux-system
+$patch: delete

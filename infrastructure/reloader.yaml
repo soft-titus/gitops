@@ -1,0 +1,21 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: reloader
+  namespace: reloader
+spec:
+  chart:
+    spec:
+      chart: reloader
+      # version: "2.2.5"
+      version: "2.*"
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: stakater
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
