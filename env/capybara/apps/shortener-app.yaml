@@ -125,3 +125,38 @@ spec:
       backendRefs:
         - name: shortener-app
           port: 80
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: shortener-flush-visits-cronjob
+  namespace: default
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cron
+              image: ghcr.io/soft-titus/shortener:0.0.0-dev-1764897281 # {"$imagepolicy": "flux-system:shortener-app"}
+              imagePullPolicy: IfNotPresent
+              command: ["python", "-m", "app.cron.flush_visits"]
+              envFrom:
+                - configMapRef:
+                    name: shortener-app-configmap
+                - configMapRef:
+                    name: postgres-configmap
+                - configMapRef:
+                    name: redis-configmap
+                - secretRef:
+                    name: postgres-shortener-secret
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
