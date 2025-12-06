@@ -134,11 +134,15 @@ metadata:
 spec:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
+      activeDeadlineSeconds: 270
+      backoffLimit: 0
       template:
         spec:
-          restartPolicy: OnFailure
+          restartPolicy: Never
           containers:
             - name: cron
               image: ghcr.io/soft-titus/shortener:0.0.0-dev-1764935457 # {"$imagepolicy": "flux-system:shortener-app"}
