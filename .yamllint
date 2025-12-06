@@ -9,6 +9,8 @@ ignore: |
   env/capybara/flux-system/gotk-sync.yaml
   env/dromedary/flux-system/gotk-components.yaml
   env/dromedary/flux-system/gotk-sync.yaml
+  env/erethizon/flux-system/gotk-components.yaml
+  env/erethizon/flux-system/gotk-sync.yaml
 
 rules:
   document-start: disable
