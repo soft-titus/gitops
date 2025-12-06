@@ -4,6 +4,14 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
 patches:
+  - target:
+      kind: Kustomization
+      name: flux-system
+      namespace: flux-system
+    patch: |
+      - op: replace
+        path: /spec/prune
+        value: false
   - patch: |
       - op: add
         path: /spec/template/spec/containers/0/args/-

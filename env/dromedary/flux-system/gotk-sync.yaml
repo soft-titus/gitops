@@ -21,7 +21,7 @@ metadata:
 spec:
   interval: 10m0s
   path: ./env/dromedary
-  # prune: true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
