@@ -1,0 +1,64 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy-gateway
+  namespace: envoy-gateway-system
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigned"
+    cert-manager.io/common-name: "dm.dr"
+    cert-manager.io/duration: "8760h"
+    cert-manager.io/renew-before: "336h"
+    cert-manager.io/private-key-algorithm: "RSA"
+    cert-manager.io/private-key-size: "2048"
+    cert-manager.io/private-key-rotation-policy: "Always"
+spec:
+  gatewayClassName: envoy-gateway
+  listeners:
+    - name: root-http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "dm.dr"
+    - name: root-https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "dm.dr"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: root-dm-dr-tls
+            namespace: envoy-gateway-system
+    - name: http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.dm.dr"
+    - name: https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.dm.dr"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-dm-dr-tls
+            namespace: envoy-gateway-system
