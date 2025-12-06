@@ -7,6 +7,8 @@ ignore: |
   env/barracuda/flux-system/gotk-sync.yaml
   env/capybara/flux-system/gotk-components.yaml
   env/capybara/flux-system/gotk-sync.yaml
+  env/dromedary/flux-system/gotk-components.yaml
+  env/dromedary/flux-system/gotk-sync.yaml
 
 rules:
   document-start: disable
