@@ -3,9 +3,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../infrastructure
-patchesStrategicMerge:
-  - traefik.yaml
-  - kubernetes-dashboard.yaml
-  - minio-operator.yaml
-  - helm-repositories.yaml
-  - namespaces.yaml
+patches:
+  - path: traefik.yaml
+  - path: kubernetes-dashboard.yaml
+  - path: minio-operator.yaml
+  - path: helm-repositories.yaml
+  - path: namespaces.yaml

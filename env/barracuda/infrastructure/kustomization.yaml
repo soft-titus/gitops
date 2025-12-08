@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../../infrastructure
   - tls.yaml
-patchesStrategicMerge:
-  - traefik.yaml
-  - envoy-gateway.yaml
-  - kubernetes-dashboard.yaml
-  - dragonfly-operator.yaml
-  - cnpg-operator.yaml
-  - reloader.yaml
-  - helm-repositories.yaml
-  - namespaces.yaml
+patches:
+  - path: traefik.yaml
+  - path: envoy-gateway.yaml
+  - path: kubernetes-dashboard.yaml
+  - path: dragonfly-operator.yaml
+  - path: cnpg-operator.yaml
+  - path: reloader.yaml
+  - path: helm-repositories.yaml
+  - path: namespaces.yaml

@@ -3,11 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../infrastructure
-patchesStrategicMerge:
-  - traefik.yaml
-  - minio-operator.yaml
-  - dragonfly-operator.yaml
-  - cnpg-operator.yaml
-  - reloader.yaml
-  - helm-repositories.yaml
-  - namespaces.yaml
+patches:
+  - path: traefik.yaml
+  - path: minio-operator.yaml
+  - path: dragonfly-operator.yaml
+  - path: cnpg-operator.yaml
+  - path: reloader.yaml
+  - path: helm-repositories.yaml
+  - path: namespaces.yaml
