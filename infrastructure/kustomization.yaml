@@ -10,4 +10,5 @@ resources:
   - minio-operator.yaml
   - dragonfly-operator.yaml
   - cnpg-operator.yaml
+  - eck-operator.yaml
   - reloader.yaml

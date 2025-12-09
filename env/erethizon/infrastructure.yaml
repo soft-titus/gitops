@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./env/dromedary/infrastructure
+  path: ./env/erethizon/infrastructure
   prune: true
   sourceRef:
     kind: GitRepository
