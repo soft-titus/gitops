@@ -62,6 +62,15 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
+  name: elastic
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://helm.elastic.co
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
   name: stakater
   namespace: flux-system
 spec:

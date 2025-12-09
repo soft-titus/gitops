@@ -19,3 +19,10 @@ metadata:
   name: minio-operator
   namespace: flux-system
 $patch: delete
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: elastic
+  namespace: flux-system
+$patch: delete

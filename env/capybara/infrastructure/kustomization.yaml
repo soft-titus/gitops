@@ -7,5 +7,6 @@ patches:
   - path: traefik.yaml
   - path: kubernetes-dashboard.yaml
   - path: minio-operator.yaml
+  - path: eck-operator.yaml
   - path: helm-repositories.yaml
   - path: namespaces.yaml

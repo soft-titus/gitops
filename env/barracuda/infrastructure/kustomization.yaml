@@ -10,6 +10,7 @@ patches:
   - path: kubernetes-dashboard.yaml
   - path: dragonfly-operator.yaml
   - path: cnpg-operator.yaml
+  - path: eck-operator.yaml
   - path: reloader.yaml
   - path: helm-repositories.yaml
   - path: namespaces.yaml

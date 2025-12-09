@@ -5,3 +5,4 @@ resources:
   - secrets.yaml
   - core.yaml
   - core-extension.yaml
+  - infrastructure.yaml
