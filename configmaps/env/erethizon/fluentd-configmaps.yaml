@@ -37,24 +37,34 @@ data:
       # add *_namespace_* to process the log for specific namespaces (comma separated)
       path /var/log/containers/*_default_*.log
       pos_file /var/log/fluentd-containers.log.pos
+      pos_file_compaction_interval 48h
       tag kubernetes.*
       read_from_head true
       <parse>
         @type multi_format
-        <pattern>
-          format json
-          time_key time
-          time_type string
-          time_format "%Y-%m-%dT%H:%M:%S.%NZ"
-          keep_time_key false
-        </pattern>
+        # python-app logs
         <pattern>
           format regexp
-          expression /^(?<time>.+) (?<stream>stdout|stderr)( (.))? (?<log>.*)$/
-          time_format '%Y-%m-%dT%H:%M:%S.%NZ'
+          expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) \[(?<level>[A-Z]+)\] (?<module>[^:]+): (?<message>.*)$/
+          time_key time
+          time_format "%Y-%m-%d %H:%M:%S,%L"
+          keep_time_key true
+        </pattern>
+        # uvicorn / fastapi logs
+        <pattern>
+          format regexp
+          expression /^(?<level>INFO|WARNING|ERROR|DEBUG):\s+(?<message>.*)$/
           keep_time_key false
         </pattern>
+        # other docker-style logs
+        <pattern>
+          format regexp
+          expression /^(?<time>.+?) (?<log>.*)$/
+          time_key time
+          keep_time_key true
+        </pattern>
       </parse>
+      # if nothing match, still emit it so we can adjust the pattern later
       emit_unmatched_lines true
     </source>
 
@@ -97,7 +107,7 @@ data:
         # <record>
         #   kubernetes.labels._app ${ record.dig("kubernetes", "labels", "app") ? record["kubernetes"]["labels"]["app"] : nil }
         # </record>
-        remove_keys $['docker'],$['kubernetes']['container_image_id'],$['kubernetes']['pod_id'],$['kubernetes']['pod_ip'],$['kubernetes']['labels']['pod-template-hash'],$['kubernetes']['labels']['app'],$['kubernetes']['labels']['app.kubernetes.io/instance'],$['kubernetes']['labels']['app.kubernetes.io/managed-by'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['statefulset.kubernetes.io/pod-name'],$['kubernetes']['labels']['apps.kubernetes.io/pod-index'],$['kubernetes']['labels']['app.kubernetes.io/part-of'],$['kubernetes']['labels']['app.kubernetes.io/replset'],$['kubernetes']['labels']['batch.kubernetes.io/controller-uid'],$['kubernetes']['labels']['batch.kubernetes.io/job-name'],$['kubernetes']['labels']['control-plane'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['controller-uid'],$['kubernetes']['labels']['group'],$['kubernetes']['labels']['heritage'],$['kubernetes']['labels']['provider'],$['kubernetes']['labels']['release']
+        remove_keys $['docker'],$['kubernetes']['container_image_id'],$['kubernetes']['pod_id'],$['kubernetes']['pod_ip'],$['kubernetes']['labels']['pod-template-hash'],$['kubernetes']['labels']['app'],$['kubernetes']['labels']['app.kubernetes.io/name'],$['kubernetes']['labels']['app.kubernetes.io/managed-by'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['statefulset.kubernetes.io/pod-name'],$['kubernetes']['labels']['apps.kubernetes.io/pod-index'],$['kubernetes']['labels']['app.kubernetes.io/part-of'],$['kubernetes']['labels']['app.kubernetes.io/replset'],$['kubernetes']['labels']['batch.kubernetes.io/controller-uid'],$['kubernetes']['labels']['batch.kubernetes.io/job-name'],$['kubernetes']['labels']['control-plane'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['controller-uid'],$['kubernetes']['labels']['group'],$['kubernetes']['labels']['heritage'],$['kubernetes']['labels']['provider'],$['kubernetes']['labels']['release']
       </filter>
       <match **>
         @type relabel
