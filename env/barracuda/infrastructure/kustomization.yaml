@@ -11,6 +11,7 @@ patches:
   - path: dragonfly-operator.yaml
   - path: cnpg-operator.yaml
   - path: eck-operator.yaml
+  - path: fluentd.yaml
   - path: reloader.yaml
   - path: helm-repositories.yaml
   - path: namespaces.yaml

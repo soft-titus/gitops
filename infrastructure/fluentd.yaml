@@ -1,0 +1,70 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: fluentd
+  namespace: fluentd-system
+spec:
+  chart:
+    spec:
+      chart: fluentd
+      # version: "0.5.3"
+      version: "0.*"
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: fluent
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    plugins:
+      - fluent-plugin-elasticsearch
+    kind: "DaemonSet"
+    annotations:
+      reloader.stakater.com/auto: "true"
+    labels:
+      app: fluentd
+    podLabels:
+      app: fluentd
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    mountVarLogDirectory: true
+    mountDockerContainersDirectory: false
+    env:
+      - name: K8S_NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+    # envFrom:
+    #   #- configMapRef:
+    #   #    name: fluentd-configmap
+    #   - secretRef:
+    #       name: fluentd-secret
+    # extraFilesConfigMapNameOverride: fluentd-config-d
+    readinessProbe:
+      httpGet:
+        path: /api/plugins.json
+        port: 24220
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 3
+    livenessProbe:
+      httpGet:
+        path: /api/plugins.json
+        port: 24220
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 5
+    priorityClassName: "system-node-critical"

@@ -71,6 +71,15 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
+  name: fluent
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://fluent.github.io/helm-charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
   name: stakater
   namespace: flux-system
 spec:

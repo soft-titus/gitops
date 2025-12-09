@@ -11,47 +11,47 @@ spec:
       - secretName: elasticsearch-filerealm-secrets
   volumeClaimDeletePolicy: DeleteOnScaledownOnly
   nodeSets:
-  - name: data-nodes
-    count: 3
-    config:
-      node.roles: ["master", "data", "ingest", "ml", "transform"]
-    podTemplate:
-      spec:
-        initContainers:
-        - name: sysctl
-          securityContext:
-            privileged: true
-            runAsUser: 0
-          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']     
-        containers:
-        - name: elasticsearch
-          resources:
-            requests:
-              cpu: 1
-              memory: 6Gi
-            limits:
-              cpu: 2
-              memory: 8Gi
-          env:
-          - name: ES_JAVA_OPTS
-            value: "-Xms4g -Xmx4g"  
-          - name: READINESS_PROBE_TIMEOUT
-            value: "60"
-          - name: READINESS_PROBE_PROTOCOL
-            value: "http"
-          - name: PROBE_PASSWORD_PATH
-            value: /mnt/elastic-internal/pod-mounted-users/elastic-internal-probe
-          - name: PROBE_USERNAME
-            value: elastic-internal-probe
-    volumeClaimTemplates:
-    - metadata:
-        name: elasticsearch-data
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi    
+    - name: data-nodes
+      count: 3
+      config:
+        node.roles: ["master", "data", "ingest", "ml", "transform"]
+      podTemplate:
+        spec:
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: 1
+                  memory: 6Gi
+                limits:
+                  cpu: 2
+                  memory: 8Gi
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms4g -Xmx4g"
+                - name: READINESS_PROBE_TIMEOUT
+                  value: "60"
+                - name: READINESS_PROBE_PROTOCOL
+                  value: "http"
+                - name: PROBE_PASSWORD_PATH
+                  value: /mnt/elastic-internal/pod-mounted-users/elastic-internal-probe
+                - name: PROBE_USERNAME
+                  value: elastic-internal-probe
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
 ---
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana

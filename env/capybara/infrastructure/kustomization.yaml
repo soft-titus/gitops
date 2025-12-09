@@ -8,5 +8,6 @@ patches:
   - path: kubernetes-dashboard.yaml
   - path: minio-operator.yaml
   - path: eck-operator.yaml
+  - path: fluentd.yaml
   - path: helm-repositories.yaml
   - path: namespaces.yaml
