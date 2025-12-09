@@ -2,6 +2,12 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: keda
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: traefik
 $patch: delete
 ---
@@ -15,16 +21,4 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: minio-operator
-$patch: delete
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: elastic-system
-$patch: delete
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: fluentd-system
 $patch: delete

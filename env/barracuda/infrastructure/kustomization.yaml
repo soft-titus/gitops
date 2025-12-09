@@ -3,15 +3,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../infrastructure
-  - tls.yaml
+  - tls-deleted.yaml
 patches:
-  - path: traefik.yaml
-  - path: envoy-gateway.yaml
-  - path: kubernetes-dashboard.yaml
-  - path: dragonfly-operator.yaml
-  - path: cnpg-operator.yaml
-  - path: eck-operator.yaml
-  - path: fluentd.yaml
-  - path: reloader.yaml
-  - path: helm-repositories.yaml
-  - path: namespaces.yaml
+  - path: traefik-deleted.yaml
+  - path: envoy-gateway-deleted.yaml
+  - path: kubernetes-dashboard-deleted.yaml
+  - path: dragonfly-operator-deleted.yaml
+  - path: cnpg-operator-deleted.yaml
+  - path: eck-operator-deleted.yaml
+  - path: fluentd-deleted.yaml
+  - path: reloader-deleted.yaml
+  - path: helm-repositories-deleted.yaml

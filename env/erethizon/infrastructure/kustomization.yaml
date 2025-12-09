@@ -4,8 +4,7 @@ kind: Kustomization
 resources:
   - ../../../infrastructure
 patches:
-  - path: traefik.yaml
-  - path: kubernetes-dashboard.yaml
-  - path: minio-operator.yaml
-  - path: helm-repositories.yaml
-  - path: namespaces.yaml
+  - path: traefik-deleted.yaml
+  - path: kubernetes-dashboard-deleted.yaml
+  - path: minio-operator-deleted.yaml
+  - path: helm-repositories-deleted.yaml
