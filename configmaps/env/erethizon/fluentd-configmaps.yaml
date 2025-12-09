@@ -1,0 +1,160 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-configmap
+  namespace: fluentd-system
+  labels:
+    app: fluentd
+data:
+  ELASTICSEARCH_SCHEME: "https:"
+  ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
+  ELASTICSEARCH_PORT: "9200"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config-d-configmap
+  namespace: fluentd-system
+  labels:
+    app: fluentd
+data:
+  system.conf: |-
+    <system>
+      log_level info
+    </system>
+    <source>
+      @type monitor_agent
+      bind 0.0.0.0
+      port 24220
+    </source>
+
+  01_sources.conf: |-
+    <source>
+      @type tail
+      @id in_tail_container_logs
+      @label @KUBERNETES
+      # add *_namespace_* to process the log for specific namespaces (comma separated)
+      path /var/log/containers/*_default_*.log
+      pos_file /var/log/fluentd-containers.log.pos
+      tag kubernetes.*
+      read_from_head true
+      <parse>
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_type string
+          time_format "%Y-%m-%dT%H:%M:%S.%NZ"
+          keep_time_key false
+        </pattern>
+        <pattern>
+          format regexp
+          expression /^(?<time>.+) (?<stream>stdout|stderr)( (.))? (?<log>.*)$/
+          time_format '%Y-%m-%dT%H:%M:%S.%NZ'
+          keep_time_key false
+        </pattern>
+      </parse>
+      emit_unmatched_lines true
+    </source>
+
+  02_filters.conf: |-
+    <label @KUBERNETES>
+      <match kubernetes.var.log.containers.fluentd**>
+        @type relabel
+        @label @FLUENT_LOG
+      </match>
+      <filter kubernetes.**>
+        @type grep
+        @id filter_empty_log
+        <exclude>
+          key log
+          pattern /^(\s*|\s*\[\s*\]\s*)$/
+        </exclude>
+      </filter>
+      <filter kubernetes.**>
+        @type kubernetes_metadata
+        @id filter_kube_metadata
+        skip_labels false
+        skip_container_metadata false
+        skip_namespace_metadata true
+        skip_master_url true
+      </filter>
+      <filter kubernetes.**>
+        @type grep
+        @id filter_cnpg_image
+        <exclude>
+          key $['kubernetes']['container_image']
+          pattern /cloudnative-pg/
+        </exclude>
+      </filter>
+      <filter kubernetes.**>
+        @type record_transformer
+        @id filter_remove_keys
+        enable_ruby   true
+        <record>
+          kubernetes.labels._app ${ record.dig("kubernetes", "labels", "app") ? record["kubernetes"]["labels"]["app"] : nil }
+        </record>
+        remove_keys $['docker'],$['kubernetes']['container_image_id'],$['kubernetes']['pod_id'],$['kubernetes']['pod_ip'],$['kubernetes']['labels']['pod-template-hash'],$['kubernetes']['labels']['app'],$['kubernetes']['labels']['app.kubernetes.io/managed-by'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['statefulset.kubernetes.io/pod-name'],$['kubernetes']['labels']['apps.kubernetes.io/pod-index'],$['kubernetes']['labels']['app.kubernetes.io/part-of'],$['kubernetes']['labels']['app.kubernetes.io/replset'],$['kubernetes']['labels']['batch.kubernetes.io/controller-uid'],$['kubernetes']['labels']['batch.kubernetes.io/job-name'],$['kubernetes']['labels']['control-plane'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['controller-uid'],$['kubernetes']['labels']['group'],$['kubernetes']['labels']['heritage'],$['kubernetes']['labels']['provider'],$['kubernetes']['labels']['release']
+      </filter>
+      <match **>
+        @type relabel
+        @label @DISPATCH
+      </match>
+    </label>
+
+  03_dispatch.conf: |-
+    <label @DISPATCH>
+      <filter **>
+        @type prometheus
+        <metric>
+          name fluentd_input_status_num_records_total
+          type counter
+          desc The total number of incoming records
+          <labels>
+            tag ${tag}
+            hostname ${hostname}
+          </labels>
+        </metric>
+      </filter>
+      <match **>
+        @type relabel
+        @label @OUTPUT
+      </match>
+    </label>
+
+  04_outputs.conf: |-
+    <label @OUTPUT>
+      <match **>
+        @type copy
+        # <store>
+        #   # see https://github.com/uken/fluent-plugin-elasticsearch
+        #   @type elasticsearch_data_stream
+        #   scheme "#{ENV['ELASTICSEARCH_SCHEME']}"
+        #   host "#{ENV['ELASTICSEARCH_HOST']}"
+        #   port "#{ENV['ELASTICSEARCH_PORT']}"
+        #   user "#{ENV['ELASTICSEARCH_USER']}"
+        #   password "#{ENV['ELASTICSEARCH_PASSWORD']}"
+        #   request_timeout 60s
+        #   data_stream_name logs
+        #   data_stream_template_name logs_template
+        #   data_stream_ilm_name logs_policy
+        #   <buffer>
+        #     @type file
+        #     path /var/log/fluentd-elastic-buffer
+        #     flush_thread_count 8
+        #     flush_interval 1s
+        #     chunk_limit_size 32M
+        #     queue_limit_length 4
+        #     flush_mode interval
+        #     retry_max_times 5
+        #     retry_max_interval 30
+        #     retry_forever false
+        #     overflow_action drop_oldest_chunk
+        #   </buffer>
+        # </store>
+        <store>
+          @type stdout
+        <store>
+      </match>
+    </label>
