@@ -92,10 +92,12 @@ data:
         @type record_transformer
         @id filter_remove_keys
         enable_ruby   true
-        <record>
-          kubernetes.labels._app ${ record.dig("kubernetes", "labels", "app") ? record["kubernetes"]["labels"]["app"] : nil }
-        </record>
-        remove_keys $['docker'],$['kubernetes']['container_image_id'],$['kubernetes']['pod_id'],$['kubernetes']['pod_ip'],$['kubernetes']['labels']['pod-template-hash'],$['kubernetes']['labels']['app'],$['kubernetes']['labels']['app.kubernetes.io/managed-by'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['statefulset.kubernetes.io/pod-name'],$['kubernetes']['labels']['apps.kubernetes.io/pod-index'],$['kubernetes']['labels']['app.kubernetes.io/part-of'],$['kubernetes']['labels']['app.kubernetes.io/replset'],$['kubernetes']['labels']['batch.kubernetes.io/controller-uid'],$['kubernetes']['labels']['batch.kubernetes.io/job-name'],$['kubernetes']['labels']['control-plane'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['controller-uid'],$['kubernetes']['labels']['group'],$['kubernetes']['labels']['heritage'],$['kubernetes']['labels']['provider'],$['kubernetes']['labels']['release']
+        # uncomment if have kubernets label "app: name"
+        # will be transformed to kubernetes.labels._app
+        # <record>
+        #   kubernetes.labels._app ${ record.dig("kubernetes", "labels", "app") ? record["kubernetes"]["labels"]["app"] : nil }
+        # </record>
+        remove_keys $['docker'],$['kubernetes']['container_image_id'],$['kubernetes']['pod_id'],$['kubernetes']['pod_ip'],$['kubernetes']['labels']['pod-template-hash'],$['kubernetes']['labels']['app'],$['kubernetes']['labels']['app.kubernetes.io/instance'],$['kubernetes']['labels']['app.kubernetes.io/managed-by'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['statefulset.kubernetes.io/pod-name'],$['kubernetes']['labels']['apps.kubernetes.io/pod-index'],$['kubernetes']['labels']['app.kubernetes.io/part-of'],$['kubernetes']['labels']['app.kubernetes.io/replset'],$['kubernetes']['labels']['batch.kubernetes.io/controller-uid'],$['kubernetes']['labels']['batch.kubernetes.io/job-name'],$['kubernetes']['labels']['control-plane'],$['kubernetes']['labels']['controller-revision-hash'],$['kubernetes']['labels']['controller-uid'],$['kubernetes']['labels']['group'],$['kubernetes']['labels']['heritage'],$['kubernetes']['labels']['provider'],$['kubernetes']['labels']['release']
       </filter>
       <match **>
         @type relabel
