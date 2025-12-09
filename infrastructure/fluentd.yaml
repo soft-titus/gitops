@@ -43,12 +43,10 @@ spec:
         valueFrom:
           fieldRef:
             fieldPath: spec.nodeName
-    # envFrom:
-    #   #- configMapRef:
-    #   #    name: fluentd-configmap
-    #   - secretRef:
-    #       name: fluentd-secret
-    # extraFilesConfigMapNameOverride: fluentd-config-d
+    envFrom:
+      - secretRef:
+          name: fluentd-secrets
+    extraFilesConfigMapNameOverride: fluentd-config-d-configmap
     readinessProbe:
       httpGet:
         path: /api/plugins.json
