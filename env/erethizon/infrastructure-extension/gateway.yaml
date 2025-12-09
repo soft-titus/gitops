@@ -1,0 +1,104 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy-gateway
+  namespace: envoy-gateway-system
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigned"
+    cert-manager.io/common-name: "erethizon.local"
+    cert-manager.io/duration: "8760h"
+    cert-manager.io/renew-before: "336h"
+    cert-manager.io/private-key-algorithm: "RSA"
+    cert-manager.io/private-key-size: "2048"
+    cert-manager.io/private-key-rotation-policy: "Always"
+spec:
+  gatewayClassName: envoy-gateway
+  listeners:
+    - name: root-http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "erethizon.local"
+    - name: root-https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "erethizon.local"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: root-erethizon-local-tls
+            namespace: envoy-gateway-system
+    - name: http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.erethizon.local"
+    - name: https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.erethizon.local"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-erethizon-local-tls
+            namespace: envoy-gateway-system
+    - name: root-app-http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "er.tz"
+    - name: root-app-https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "er.tz"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: root-er-tz-tls
+            namespace: envoy-gateway-system
+    - name: app-http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.er.tz"
+    - name: app-https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.er.tz"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-er-tz-tls
+            namespace: envoy-gateway-system

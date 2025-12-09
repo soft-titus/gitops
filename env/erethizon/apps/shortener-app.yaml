@@ -1,0 +1,166 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: shortener-app
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: generic-microservice-helm
+    namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    fullnameOverride: "shortener-app"
+    image:
+      repository: ghcr.io/soft-titus/shortener # {"$imagepolicy": "flux-system:shortener-app:name"}
+      tag: 1.0.0 # {"$imagepolicy": "flux-system:shortener-app:tag"}
+    replicaCount: 2
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    container:
+      ports:
+        http: 8080
+    service:
+      type: ClusterIP
+      ports:
+        - port: 80
+          name: http
+    readinessProbe:
+      enabled: true
+      httpGet:
+        scheme: HTTP
+        port: http
+        path: /health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+    livenessProbe:
+      enabled: true
+      httpGet:
+        scheme: HTTP
+        port: http
+        path: /health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+    envFrom:
+      - configMapRef:
+          name: shortener-app-configmap
+      - configMapRef:
+          name: postgres-configmap
+      - configMapRef:
+          name: redis-configmap
+      - secretRef:
+          name: postgres-shortener-secret
+    serviceAccount:
+      create: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shortener-app-configmap
+  namespace: default
+data:
+  LOG_LEVEL: "DEBUG"
+  BASE_URL: "https://er.tz"
+  REDIS_DB: "0"
+  POSTGRES_DB: "shortener"
+  CACHE_TTL_HOURS: "168"
+  SHORT_CODE_LENGTH: "8"
+  SHORT_CODE_MAX_RETRIES: "10"
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: shortener-app
+  namespace: flux-system
+spec:
+  image: ghcr.io/soft-titus/shortener
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: shortener-app
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: shortener-app
+  filterTags:
+    pattern: '.*(\-\d+)?(\-|$)[^\-\n]{0,7}$'
+  policy:
+    semver:
+      range: ">= 0.0.0 < 2.0.0"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: shortener-app
+  namespace: default
+spec:
+  parentRefs:
+    - name: envoy-gateway
+      namespace: envoy-gateway-system
+  hostnames:
+    - "er.tz"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: shortener-app
+          port: 80
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: shortener-flush-visits-cronjob
+  namespace: default
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 270
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: cron
+              image: ghcr.io/soft-titus/shortener:1.0.0 # {"$imagepolicy": "flux-system:shortener-app"}
+              imagePullPolicy: IfNotPresent
+              command: ["python", "-m", "app.cron.flush_visits"]
+              envFrom:
+                - configMapRef:
+                    name: shortener-app-configmap
+                - configMapRef:
+                    name: postgres-configmap
+                - configMapRef:
+                    name: redis-configmap
+                - secretRef:
+                    name: postgres-shortener-secret
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
