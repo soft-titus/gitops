@@ -42,26 +42,27 @@ data:
       read_from_head true
       <parse>
         @type multi_format
-        # python-app logs
+        # JSON logs
+        <pattern>
+          format json
+          time_key time
+          time_type string
+          time_format "%Y-%m-%dT%H:%M:%S.%NZ"
+          keep_time_key true
+        </pattern>
+        # Text logs with timestamp
         <pattern>
           format regexp
-          expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) \[(?<level>[A-Z]+)\] (?<module>[^:]+): (?<message>.*)$/
+          expression /^(?:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z) (?:stdout|stderr) F (?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) (?<log>.*)$/
           time_key time
           time_format "%Y-%m-%d %H:%M:%S,%L"
           keep_time_key true
         </pattern>
-        # uvicorn / fastapi logs
+        # Text logs without timestamp
         <pattern>
           format regexp
-          expression /^(?<level>INFO|WARNING|ERROR|DEBUG):\s+(?<message>.*)$/
+          expression /^(?:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z) (?:stdout|stderr) F (?<log>.*)$/
           keep_time_key false
-        </pattern>
-        # other docker-style logs
-        <pattern>
-          format regexp
-          expression /^(?<time>.+?) (?<log>.*)$/
-          time_key time
-          keep_time_key true
         </pattern>
       </parse>
       # if nothing match, still emit it so we can adjust the pattern later
