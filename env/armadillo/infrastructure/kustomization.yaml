@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../../infrastructure
 patches:
-  - path: traefik-deleted-deleted.yaml
+  - path: traefik-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: dragonfly-operator-deleted.yaml
   - path: cnpg-operator-deleted.yaml
