@@ -5,7 +5,7 @@ metadata:
   name: elasticsearch-configmap
   namespace: elastic
 data:
-  ELASTICSEARCH_SCHEME: "https:"
+  ELASTICSEARCH_SCHEME: "http"
   ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
   ELASTICSEARCH_PORT: "9200"
 ---
@@ -15,6 +15,6 @@ metadata:
   name: elasticsearch-configmap
   namespace: fluentd-system
 data:
-  ELASTICSEARCH_SCHEME: "https:"
+  ELASTICSEARCH_SCHEME: "http"
   ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
   ELASTICSEARCH_PORT: "9200"
