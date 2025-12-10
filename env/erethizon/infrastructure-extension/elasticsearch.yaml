@@ -5,6 +5,10 @@ metadata:
   namespace: elastic
 spec:
   version: 9.2.2
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
   auth:
     disableElasticUser: true
     fileRealm:
