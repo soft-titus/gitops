@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-configmap
+  namespace: elastic
+data:
+  ELASTICSEARCH_SCHEME: "https:"
+  ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
+  ELASTICSEARCH_PORT: "9200"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-configmap
+  namespace: fluentd-system
+data:
+  ELASTICSEARCH_SCHEME: "https:"
+  ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
+  ELASTICSEARCH_PORT: "9200"

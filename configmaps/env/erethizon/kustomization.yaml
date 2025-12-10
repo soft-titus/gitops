@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - postgres-configmaps.yaml
   - redis-configmaps.yaml
+  - elasticsearch-configmaps.yaml
   - fluentd-configmaps.yaml
