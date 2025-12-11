@@ -20,6 +20,7 @@ spec:
       retries: 1
   interval: 1m0s
   values:
+    variant: elasticsearch8
     plugins:
       - fluent-plugin-elasticsearch
     kind: "DaemonSet"
