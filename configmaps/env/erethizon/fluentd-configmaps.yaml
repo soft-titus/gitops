@@ -128,34 +128,34 @@ data:
     <label @OUTPUT>
       <match **>
         @type copy
-        # <store>
-        #   # see https://github.com/uken/fluent-plugin-elasticsearch
-        #   @type elasticsearch_data_stream
-        #   scheme "#{ENV['ELASTICSEARCH_SCHEME']}"
-        #   host "#{ENV['ELASTICSEARCH_HOST']}"
-        #   port "#{ENV['ELASTICSEARCH_PORT']}"
-        #   user "#{ENV['ELASTICSEARCH_USER']}"
-        #   password "#{ENV['ELASTICSEARCH_PASSWORD']}"
-        #   request_timeout 60s
-        #   data_stream_name logs
-        #   data_stream_template_name logs_template
-        #   data_stream_ilm_name logs_policy
-        #   <buffer>
-        #     @type file
-        #     path /var/log/fluentd-elastic-buffer
-        #     flush_thread_count 8
-        #     flush_interval 1s
-        #     chunk_limit_size 32M
-        #     queue_limit_length 4
-        #     flush_mode interval
-        #     retry_max_times 5
-        #     retry_max_interval 30
-        #     retry_forever false
-        #     overflow_action drop_oldest_chunk
-        #   </buffer>
-        # </store>
         <store>
-          @type stdout
+          # see https://github.com/uken/fluent-plugin-elasticsearch
+          @type elasticsearch_data_stream
+          scheme "#{ENV['ELASTICSEARCH_SCHEME']}"
+          host "#{ENV['ELASTICSEARCH_HOST']}"
+          port "#{ENV['ELASTICSEARCH_PORT']}"
+          user "#{ENV['ELASTICSEARCH_USER']}"
+          password "#{ENV['ELASTICSEARCH_PASSWORD']}"
+          request_timeout 60s
+          data_stream_name "#{ENV['ELASTICSEARCH_DATA_STREAM_NAME']}"
+          data_stream_template_name "#{ENV['ELASTICSEARCH_DATA_STREAM_INDEX_TEMPLATE_NAME']}"
+          "#{ENV['ELASTICSEARCH_DATA_STREAM_ILM_NAME']}"
+          <buffer>
+            @type file
+            path /var/log/fluentd-elastic-buffer
+            flush_thread_count 8
+            flush_interval 1s
+            chunk_limit_size 32M
+            queue_limit_length 4
+            flush_mode interval
+            retry_max_times 5
+            retry_max_interval 30
+            retry_forever false
+            overflow_action drop_oldest_chunk
+          </buffer>
         </store>
+        # <store>
+        #   @type stdout
+        # </store>
       </match>
     </label>
