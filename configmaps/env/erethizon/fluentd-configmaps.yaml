@@ -139,7 +139,7 @@ data:
           request_timeout 60s
           data_stream_name "#{ENV['ELASTICSEARCH_DATA_STREAM_NAME']}"
           data_stream_template_name "#{ENV['ELASTICSEARCH_DATA_STREAM_INDEX_TEMPLATE_NAME']}"
-          "#{ENV['ELASTICSEARCH_DATA_STREAM_ILM_NAME']}"
+          data_stream_ilm_name "#{ENV['ELASTICSEARCH_DATA_STREAM_ILM_NAME']}"
           <buffer>
             @type file
             path /var/log/fluentd-elastic-buffer
