@@ -6,3 +6,4 @@ resources:
   - dragonfly.yaml
   - cnpg-cluster.yaml
   - elasticsearch.yaml
+  - setup-elasticsearch-logs-data-stream-job.yaml
