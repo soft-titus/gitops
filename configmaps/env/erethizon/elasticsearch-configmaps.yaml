@@ -8,6 +8,11 @@ data:
   ELASTICSEARCH_SCHEME: "http"
   ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
   ELASTICSEARCH_PORT: "9200"
+
+  # for logging with fluentd
+  ELASTICSEARCH_LOGS_DATA_STREAM_NAME: "logs"
+  ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME: "logs-template"
+  ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME: "logs-policy"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -18,3 +23,8 @@ data:
   ELASTICSEARCH_SCHEME: "http"
   ELASTICSEARCH_HOST: "elasticsearch-es-http.elastic.svc.cluster.local"
   ELASTICSEARCH_PORT: "9200"
+
+  # for logging with fluentd
+  ELASTICSEARCH_LOGS_DATA_STREAM_NAME: "logs"
+  ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME: "logs-template"
+  ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME: "logs-policy"
