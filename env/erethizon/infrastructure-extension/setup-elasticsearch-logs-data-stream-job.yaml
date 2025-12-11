@@ -14,10 +14,10 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              BASE_URL="${ELASTICSEARCH_SCHEME}://${ELASTICSEARCH_USER}:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
+              ELASTICSEARCH_BASE_URL="${ELASTICSEARCH_SCHEME}://${ELASTICSEARCH_USER}:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
 
               echo "Waiting for Elasticsearch..."
-              until curl -s "${BASE_URL}/_cluster/health" | grep -q '"status":"green"'; do
+              until curl -s "${ELASTICSEARCH_BASE_URL}/_cluster/health" | grep -q '"status":"green"'; do
                 echo "Not ready, sleeping 5s..."
                 sleep 5
               done
@@ -34,18 +34,19 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              BASE_URL="${ELASTICSEARCH_SCHEME}://${ELASTICSEARCH_USER}:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
+              ELASTICSEARCH_BASE_URL="${ELASTICSEARCH_SCHEME}://${ELASTICSEARCH_USER}:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
+              KIBANA_BASE_URL="${KIBANA_SCHEME}://${ELASTICSEARCH_USER}:${ELASTICSEARCH_PASSWORD}@${KIBANA_HOST}:${KIBANA_PORT}"
 
               echo "Checking ILM policy '${ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME}'..."
               HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-                "${BASE_URL}/_ilm/policy/${ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME}")
+                "${ELASTICSEARCH_BASE_URL}/_ilm/policy/${ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME}")
 
               if [ "$HTTP_CODE" = "200" ]; then
                 echo "ILM policy already exists."
               else
                 echo "Creating ILM policy..."
 
-                curl -s -X PUT "${BASE_URL}/_ilm/policy/${ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME}" \
+                curl -s -X PUT "${ELASTICSEARCH_BASE_URL}/_ilm/policy/${ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME}" \
                   -H "Content-Type: application/json" \
                   -d @- <<EOF
               {
@@ -75,14 +76,14 @@ spec:
 
               echo "Checking index template '${ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME}'..."
               HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-                "${BASE_URL}/_index_template/${ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME}")
+                "${ELASTICSEARCH_BASE_URL}/_index_template/${ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME}")
 
               if [ "$HTTP_CODE" = "200" ]; then
                 echo "Index template already exists."
               else
                 echo "Creating index template..."
 
-                curl -s -X PUT "${BASE_URL}/_index_template/${ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME}" \
+                curl -s -X PUT "${ELASTICSEARCH_BASE_URL}/_index_template/${ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME}" \
                   -H "Content-Type: application/json" \
                   -d @- <<EOF
               {
@@ -111,21 +112,51 @@ spec:
 
               echo "Checking data stream '${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}'..."
               HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-                "${BASE_URL}/_data_stream/${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}")
+                "${ELASTICSEARCH_BASE_URL}/_data_stream/${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}")
 
               if [ "$HTTP_CODE" = "200" ]; then
                 echo "Data stream already exists."
               else
                 echo "Creating data stream..."
 
-                curl -s -X PUT "${BASE_URL}/_data_stream/${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}" \
+                curl -s -X PUT "${ELASTICSEARCH_BASE_URL}/_data_stream/${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}" \
                   -H "Content-Type: application/json" \
 
                 echo "Data stream created."
               fi
+
+              echo "Checking Kibana data view '${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}'..."
+              DATA_VIEWS=$(curl -s \
+                -X GET "${KIBANA_BASE_URL}/api/data_views" \
+                -H "kbn-xsrf: true")
+
+              EXISTS=$(echo "${DATA_VIEWS}" | grep "\"name\":\"${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}\"" || true)
+
+              if [ -n "$EXISTS" ]; then
+                echo "Data view '${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}' already exists."
+              else
+                echo "Creating Kibana data view '${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}'..."
+              #   curl -s -X POST "${KIBANA_BASE_URL}/api/data_views/data_view" \
+              #     -H "kbn-xsrf: true" \
+              #     -H "Content-Type: application/json" \
+              #     -d @- <<EOF
+              # {
+              #   "data_view": {
+              #     "name": "${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}",
+              #     "title": "${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}*",
+              #     "timeFieldName": "@timestamp"
+              #   }
+              # }
+              # EOF
+                echo "Kibana data view '${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}' created."
+              fi
+
+              echo "Done!"
 
           envFrom:
             - secretRef:
                 name: elasticsearch-secrets
             - configMapRef:
                 name: elasticsearch-configmap
+            - configMapRef:
+                name: kibana-configmap
