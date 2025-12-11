@@ -21,8 +21,10 @@ spec:
   interval: 1m0s
   values:
     variant: elasticsearch8
-    # plugins:
-    #   - fluent-plugin-elasticsearch
+    plugins:
+      - elasticsearch
+      - elastic-transport
+      - fluent-plugin-elasticsearch
     kind: "DaemonSet"
     annotations:
       reloader.stakater.com/auto: "true"
