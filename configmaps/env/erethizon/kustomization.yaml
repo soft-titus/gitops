@@ -5,4 +5,5 @@ resources:
   - postgres-configmaps.yaml
   - redis-configmaps.yaml
   - elasticsearch-configmaps.yaml
+  - kibana-configmaps.yaml
   - fluentd-configmaps.yaml
