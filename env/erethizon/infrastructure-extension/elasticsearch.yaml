@@ -15,9 +15,11 @@ spec:
       - secretName: elasticsearch-elastic-user-secrets
       - secretName: elasticsearch-setup-logs-data-stream-user-secrets
       - secretName: elasticsearch-logs-writer-user-secrets
+      - secretName: elasticsearch-logs-reader-user-secrets
     roles:
       - secretName: elasticsearch-setup-logs-data-stream-role-secrets
       - secretName: elasticsearch-logs-writer-role-secrets
+      - secretName: elasticsearch-logs-reader-role-secrets
   volumeClaimDeletePolicy: DeleteOnScaledownOnly
   nodeSets:
     - name: data-nodes
