@@ -13,6 +13,9 @@ spec:
     disableElasticUser: true
     fileRealm:
       - secretName: elasticsearch-elastic-user-secrets
+      - secretName: elasticsearch-logs-writer-user-secrets
+    roles:
+      - secretName: elasticsearch-logs-writer-role-secrets
   volumeClaimDeletePolicy: DeleteOnScaledownOnly
   nodeSets:
     - name: data-nodes
