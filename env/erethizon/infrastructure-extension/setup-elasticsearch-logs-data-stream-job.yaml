@@ -130,7 +130,7 @@ spec:
                 echo "Creating data stream..."
 
                 curl -s -X PUT "${ELASTICSEARCH_BASE_URL}/_data_stream/${ELASTICSEARCH_LOGS_DATA_STREAM_NAME}" \
-                  -H "Content-Type: application/json" \
+                  -H "Content-Type: application/json"
 
                 echo "Data stream created."
               fi
