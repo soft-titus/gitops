@@ -11,6 +11,8 @@ ignore: |
   env/dromedary/flux-system/gotk-sync.yaml
   env/erethizon/flux-system/gotk-components.yaml
   env/erethizon/flux-system/gotk-sync.yaml
+  env/felabella/flux-system/gotk-components.yaml
+  env/felabella/flux-system/gotk-sync.yaml
 
 rules:
   document-start: disable
