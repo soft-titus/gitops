@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../core
+  - namespaces.yaml
 patches:
   - path: metrics-server-deleted.yaml
   - path: helm-repositories-deleted.yaml
