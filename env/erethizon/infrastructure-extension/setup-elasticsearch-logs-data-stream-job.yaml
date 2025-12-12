@@ -23,9 +23,19 @@ spec:
               done
 
               echo "Elasticsearch is Healthy!"
+
+          env:
+            - name: ELASTICSEARCH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-elastic-user-secrets
+                  key: username
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-elastic-user-secrets
+                  key: password
           envFrom:
-            - secretRef:
-                name: elasticsearch-secrets
             - configMapRef:
                 name: elasticsearch-configmap
       containers:
