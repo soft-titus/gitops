@@ -12,7 +12,7 @@ spec:
   auth:
     disableElasticUser: true
     fileRealm:
-      - secretName: elasticsearch-filerealm-secrets
+      - secretName: elasticsearch-elastic-user-secrets
   volumeClaimDeletePolicy: DeleteOnScaledownOnly
   nodeSets:
     - name: data-nodes
