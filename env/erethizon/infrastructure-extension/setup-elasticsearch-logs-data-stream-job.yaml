@@ -28,12 +28,12 @@ spec:
             - name: ELASTICSEARCH_USER
               valueFrom:
                 secretKeyRef:
-                  name: elasticsearch-elastic-user-secrets
+                  name: elasticsearch-setup-logs-data-stream-user-secrets
                   key: username
             - name: ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: elasticsearch-elastic-user-secrets
+                  name: elasticsearch-setup-logs-data-stream-user-secrets
                   key: password
           envFrom:
             - configMapRef:
@@ -167,12 +167,12 @@ spec:
             - name: ELASTICSEARCH_USER
               valueFrom:
                 secretKeyRef:
-                  name: elasticsearch-elastic-user-secrets
+                  name: elasticsearch-setup-logs-data-stream-user-secrets
                   key: username
             - name: ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: elasticsearch-elastic-user-secrets
+                  name: elasticsearch-setup-logs-data-stream-user-secrets
                   key: password
           envFrom:
             - configMapRef:
