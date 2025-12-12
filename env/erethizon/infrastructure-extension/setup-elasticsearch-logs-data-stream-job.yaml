@@ -156,12 +156,12 @@ spec:
           env:
             - name: ELASTICSEARCH_USER
               valueFrom:
-                secretRef:
+                secretKeyRef:
                   name: elasticsearch-elastic-user-secrets
                   key: username
             - name: ELASTICSEARCH_PASSWORD
               valueFrom:
-                secretRef:
+                secretKeyRef:
                   name: elasticsearch-elastic-user-secrets
                   key: password
           envFrom:
