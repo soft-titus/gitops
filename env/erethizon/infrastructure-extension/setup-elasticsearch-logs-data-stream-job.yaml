@@ -159,7 +159,7 @@ spec:
                 secretRef:
                   name: elasticsearch-elastic-user-secrets
                   key: username
-            - name: ELASTICSEARCH_USER
+            - name: ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretRef:
                   name: elasticsearch-elastic-user-secrets
