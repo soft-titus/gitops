@@ -153,9 +153,18 @@ spec:
 
               echo "Done!"
 
+          env:
+            - name: ELASTICSEARCH_USER
+              valueFrom:
+                secretRef:
+                  name: elasticsearch-elastic-user-secrets
+                  key: username
+            - name: ELASTICSEARCH_USER
+              valueFrom:
+                secretRef:
+                  name: elasticsearch-elastic-user-secrets
+                  key: password
           envFrom:
-            - secretRef:
-                name: elasticsearch-secrets
             - configMapRef:
                 name: elasticsearch-configmap
             - configMapRef:
