@@ -2,6 +2,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: fluentd-configmap
+  namespace: fluentd-system
+data:
+  ELASTICSEARCH_LOGS_DATA_STREAM_NAME: "logs"
+  ELASTICSEARCH_LOGS_DATA_STREAM_INDEX_TEMPLATE_NAME: "logs-template"
+  ELASTICSEARCH_LOGS_DATA_STREAM_ILM_NAME: "logs-policy"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: fluentd-config-d-configmap
   namespace: fluentd-system
   labels:

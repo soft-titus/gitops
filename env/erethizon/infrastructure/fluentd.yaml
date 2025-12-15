@@ -7,6 +7,8 @@ metadata:
 spec:
   values:
     envFrom:
+      - configMapRef:
+          name: fluentd-configmap
       - secretRef:
           name: elasticsearch-secrets
       - configMapRef:
