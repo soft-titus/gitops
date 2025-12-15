@@ -8,4 +8,5 @@ patches:
   - path: kubernetes-dashboard-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
+  - path: cfk-operator-deleted.yaml
   - path: fluentd-deleted.yaml

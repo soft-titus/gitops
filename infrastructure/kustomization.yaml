@@ -9,5 +9,6 @@ resources:
   - dragonfly-operator.yaml
   - cnpg-operator.yaml
   - eck-operator.yaml
+  - cfk-operator.yaml
   - fluentd.yaml
   - reloader.yaml

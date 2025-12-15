@@ -8,3 +8,4 @@ patches:
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
   - path: minio-operator-deleted.yaml
+  - path: cfk-operator-deleted.yaml

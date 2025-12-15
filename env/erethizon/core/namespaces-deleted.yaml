@@ -16,3 +16,9 @@ kind: Namespace
 metadata:
   name: minio-operator
 $patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: confluent
+$patch: delete
