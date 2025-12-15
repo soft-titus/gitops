@@ -28,3 +28,8 @@ spec:
     remediation:
       retries: 1
   interval: 1m0s
+  values:
+    replicas: 2
+    priorityClassName: system-node-critical
+    namespaced: false
+    kRaftEnabled: true
