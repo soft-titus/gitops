@@ -9,4 +9,3 @@ patches:
   - path: minio-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
   - path: fluentd-deleted.yaml
-  - path: helm-repositories-deleted.yaml

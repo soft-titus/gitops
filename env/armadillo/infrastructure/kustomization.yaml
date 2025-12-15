@@ -11,4 +11,3 @@ patches:
   - path: eck-operator-deleted.yaml
   - path: fluentd-deleted.yaml
   - path: reloader-deleted.yaml
-  - path: helm-repositories-deleted.yaml
