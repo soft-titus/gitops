@@ -6,5 +6,4 @@ resources:
   - namespaces.yaml
 patches:
   - path: metrics-server-deleted.yaml
-  - path: helm-repositories-deleted.yaml
   - path: namespaces-deleted.yaml

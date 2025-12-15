@@ -4,34 +4,6 @@ kind: Namespace
 metadata:
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
-  name: metallb-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  name: cert-manager
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  name: longhorn-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  name: keda
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
   name: envoy-gateway-system
 ---
 apiVersion: v1

@@ -7,5 +7,4 @@ resources:
 patches:
   - path: metrics-server-deleted.yaml
   - path: keda-deleted.yaml
-  - path: helm-repositories-deleted.yaml
   - path: namespaces-deleted.yaml
