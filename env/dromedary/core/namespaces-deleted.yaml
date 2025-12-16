@@ -26,7 +26,7 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: confluent
+  name: kafka-operator
 $patch: delete
 ---
 apiVersion: v1
