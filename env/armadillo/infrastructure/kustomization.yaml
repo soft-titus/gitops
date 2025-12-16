@@ -9,6 +9,6 @@ patches:
   - path: dragonfly-operator-deleted.yaml
   - path: cnpg-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
-  - path: cfk-operator-deleted.yaml
+  - path: kafka-operator-deleted.yaml
   - path: fluentd-deleted.yaml
   - path: reloader-deleted.yaml

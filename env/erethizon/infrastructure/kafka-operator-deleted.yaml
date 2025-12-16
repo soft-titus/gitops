@@ -1,14 +1,14 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
-  name: confluenting
+  name: kafka-operator
   namespace: flux-system
 $patch: delete
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cfk-operator
-  namespace: confluent
+  name: kafka-operator
+  namespace: kafka-operator
 $patch: delete
