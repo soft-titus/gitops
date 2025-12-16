@@ -5,3 +5,4 @@ resources:
   - gateway.yaml
   - minio-tenant.yaml
   - dragonfly.yaml
+  - kafka.yaml
