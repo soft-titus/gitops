@@ -7,6 +7,7 @@ patches:
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
   - path: minio-operator-deleted.yaml
+  - path: mongodb-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
   - path: kafka-operator-deleted.yaml
   - path: fluentd-deleted.yaml

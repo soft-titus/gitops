@@ -26,6 +26,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: mongodb-system
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: elastic-system
 $patch: delete
 ---
