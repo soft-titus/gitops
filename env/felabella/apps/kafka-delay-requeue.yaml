@@ -1,0 +1,158 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kafka-delay-requeue
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: generic-microservice-helm
+    namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    fullnameOverride: "kafka-delay-requeue"
+    image:
+      repository: ghcr.io/soft-titus/kafka-delay-requeue # {"$imagepolicy": "flux-system:kafka-delay-requeue:name"}
+      tag: 1.1.1 # {"$imagepolicy": "flux-system:kafka-delay-requeue:tag"}
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    envFrom:
+      - configMapRef:
+          name: kafka-delay-requeue-configmap
+      - configMapRef:
+          name: kafka-configmap
+    serviceAccount:
+      create: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-delay-requeue-configmap
+  namespace: default
+data:
+  LOG_LEVEL: "INFO"
+  DELAY_SHORT_INTERVAL_SECONDS: "5"
+  DELAY_LONG_INTERVAL_SECONDS: "15"
+  KAFKA_CONSUMER_GROUP_NAME: "kafka.delay.requeue.group"
+  KAFKA_POOLING_INTERVAL_SECONDS: "15"
+  KAFKA_RETRIABLE_TOPIC: "retriable"
+  KAFKA_RETRIABLE_DLQ_TOPIC: "retriable.dlq"
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: kafka-delay-requeue
+  namespace: flux-system
+spec:
+  image: ghcr.io/soft-titus/kafka-delay-requeue
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: kafka-delay-requeue
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: kafka-delay-requeue
+  filterTags:
+    pattern: '.*(\-\d+)?(\-|$)[^\-\n]{0,7}$'
+  policy:
+    semver:
+      range: ">= 0.0.0 < 2.0.0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-delay-requeue-scaledobject
+  namespace: default
+  labels:
+    app: kafka-delay-requeue
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: kafka-delay-requeue
+  minReplicaCount: 0
+  maxReplicaCount: 3
+  cooldownPeriod: 30
+  pollingInterval: 15
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+        topic: retriable
+        consumerGroup: "kafka.delay.requeue.group"
+        lagThreshold: "1"
+        scaleToZeroOnInvalidOffset: "true"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kafka-delay-requeue-kafka-heartbeat-cronjob
+  namespace: default
+spec:
+  schedule: "0 0 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: kafka-heartbeat
+              image: apache/kafka:4.1.1
+              imagePullPolicy: IfNotPresent
+              workingDir: /opt/kafka/bin
+              envFrom:
+                - configMapRef:
+                    name: kafka-configmap
+                - configMapRef:
+                    name: kafka-delay-requeue-configmap
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  echo "Describing topic: ${KAFKA_RETRIABLE_TOPIC}"
+
+                  PARTITION_COUNT=$(./kafka-topics.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --describe \
+                    --topic "${KAFKA_RETRIABLE_TOPIC}" \
+                    | sed 's/^[[:space:]]*//' \
+                    | grep 'Partition:' \
+                    | wc -l)
+
+                  if [ -z "${PARTITION_COUNT}" ]; then
+                    echo "Failed to detect partition count"
+                    exit 1
+                  fi
+
+                  echo "Topic has ${PARTITION_COUNT} partitions"
+
+                  echo "Sending ${PARTITION_COUNT} heartbeat messages (round-robin)"
+
+                  for ((i=0; i<${PARTITION_COUNT}; i++)); do
+                    echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}" | \
+                      ./kafka-console-producer.sh \
+                      --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                      --topic "${KAFKA_RETRIABLE_TOPIC}" \
+                      --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+
+                    echo "Sent heartbeat message $((i+1))"
+                  done
+
+                  echo "Kafka heartbeat job completed successfully"
