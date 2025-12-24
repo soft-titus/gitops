@@ -33,7 +33,7 @@ spec:
       - configMapRef:
           name: kafka-configmap
       - configMapRef:
-          name: mongodb-configmap
+          name: mongo-configmap
       - secretRef:
           name: mongo-secrets
     serviceAccount:
