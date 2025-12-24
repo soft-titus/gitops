@@ -81,3 +81,26 @@ spec:
   policy:
     semver:
       range: ">= 0.0.0 < 2.0.0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: sudoku-puzzle-generator-scaledobject
+  namespace: default
+  labels:
+    app: sudoku-puzzle-generator
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: sudoku-puzzle-generator
+  minReplicaCount: 0
+  maxReplicaCount: 3
+  cooldownPeriod: 60
+  pollingInterval: 15
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+        topic: sudoku.puzzle.generate
+        consumerGroup: "sudoku.puzzle.generate.group"
+        lagThreshold: "1"
