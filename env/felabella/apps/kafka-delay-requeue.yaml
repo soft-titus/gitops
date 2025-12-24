@@ -84,7 +84,7 @@ spec:
     kind: Deployment
     name: kafka-delay-requeue
   minReplicaCount: 0
-  maxReplicaCount: 3
+  maxReplicaCount: 1
   cooldownPeriod: 30
   pollingInterval: 15
   triggers:
