@@ -145,13 +145,10 @@ spec:
                   echo "Sending ${PARTITION_COUNT} heartbeat messages (round-robin)"
 
                   for ((i=0; i<${PARTITION_COUNT}; i++)); do
-                    echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}" | \
-                      ./kafka-console-producer.sh \
-                      --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
-                      --topic "${KAFKA_RETRIABLE_TOPIC}" \
-                      --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
-
-                    echo "Sent heartbeat message $((i+1))"
-                  done
+                    echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}"
+                  done | ./kafka-console-producer.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --topic "${KAFKA_RETRIABLE_TOPIC}" \
+                    --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
 
                   echo "Kafka heartbeat job completed successfully"
