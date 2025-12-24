@@ -1,0 +1,82 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sudoku-puzzle-generator
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: generic-microservice-helm
+    namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    fullnameOverride: "sudoku-puzzle-generator"
+    image:
+      repository: ghcr.io/soft-titus/sudoku-puzzle-generator # {"$imagepolicy": "flux-system:sudoku-puzzle-generator:name"}
+      tag: 1.0.0 # {"$imagepolicy": "flux-system:sudoku-puzzle-generator:tag"}
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+    envFrom:
+      - configMapRef:
+          name: sudoku-puzzle-generator-configmap
+      - configMapRef:
+          name: kafka-configmap
+      - configMapRef:
+          name: mongodb-configmap
+      - secretRef:
+          name: mongo-secrets
+    serviceAccount:
+      create: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sudoku-puzzle-generator-configmap
+  namespace: default
+data:
+  LOG_LEVEL: "INFO"
+  KAFKA_CONSUMER_GROUP_NAME: "sudoku.puzzle.generate.group"
+  KAFKA_RETRIABLE_TOPIC: "retriable"
+  KAFKA_PUZZLE_TOPIC: "sudoku.puzzle.generate"
+  KAFKA_PUZZLE_DLQ_TOPIC: "sudoku.puzzle.generate.dlq"
+  KAFKA_IMAGE_TOPIC: "sudoku.image.generate"
+  MONGO_DB: "sudoku"
+  MONGO_COLLECTION_NAME: "puzzle"
+  TASK_MAX_RETRIES: 3
+  TASK_BASE_BACKOFF_SECONDS: 15
+  TASK_BASE_BACKOFF_MULTIPLIER: 2
+  TASK_MAX_BACKOFF_SECONDS: 300
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: sudoku-puzzle-generator
+  namespace: flux-system
+spec:
+  image: ghcr.io/soft-titus/sudoku-puzzle-generator
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: sudoku-puzzle-generator
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: sudoku-puzzle-generator
+  filterTags:
+    pattern: '.*(\-\d+)?(\-|$)[^\-\n]{0,7}$'
+  policy:
+    semver:
+      range: ">= 0.0.0 < 2.0.0"
