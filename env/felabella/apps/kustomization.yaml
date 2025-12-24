@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ../../../apps
   - kafka-topics.yaml
-  - sudoku-app.yaml
+  - sudoku-puzzle-generator.yaml
