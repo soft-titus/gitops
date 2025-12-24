@@ -47,16 +47,17 @@ metadata:
 data:
   LOG_LEVEL: "INFO"
   KAFKA_CONSUMER_GROUP_NAME: "sudoku.puzzle.generate.group"
+  KAFKA_POOLING_INTERVAL_SECONDS: "15"
   KAFKA_RETRIABLE_TOPIC: "retriable"
   KAFKA_PUZZLE_TOPIC: "sudoku.puzzle.generate"
   KAFKA_PUZZLE_DLQ_TOPIC: "sudoku.puzzle.generate.dlq"
   KAFKA_IMAGE_TOPIC: "sudoku.image.generate"
   MONGO_DB: "sudoku"
   MONGO_COLLECTION_NAME: "puzzle"
-  TASK_MAX_RETRIES: 3
-  TASK_BASE_BACKOFF_SECONDS: 15
-  TASK_BASE_BACKOFF_MULTIPLIER: 2
-  TASK_MAX_BACKOFF_SECONDS: 300
+  TASK_MAX_RETRIES: "3"
+  TASK_BASE_BACKOFF_SECONDS: "15"
+  TASK_BASE_BACKOFF_MULTIPLIER: "2"
+  TASK_MAX_BACKOFF_SECONDS: "300"
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
