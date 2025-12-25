@@ -2,6 +2,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: minio-configmap
+  namespace: minio
+data:
+  SUDOKU_BUCKET_NAME: "sudoku"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: minio-policy-configmap
   namespace: minio
 data:
@@ -16,7 +24,7 @@ data:
             "s3:ListBucket"
           ],
           "Resource": [
-            "arn:aws:s3:::sudoku-images"
+            "arn:aws:s3:::sudoku"
           ]
         },
         {
@@ -27,7 +35,7 @@ data:
             "s3:DeleteObject"
           ],
           "Resource": [
-            "arn:aws:s3:::sudoku-images/*"
+            "arn:aws:s3:::sudoku/*"
           ]
         }
       ]

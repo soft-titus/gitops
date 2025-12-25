@@ -22,9 +22,9 @@ spec:
               storage: 8Gi
           storageClassName: default
   users:
-    - name: storage-user
+    - name: admin
   buckets:
-    - name: sudoku-images
+    - name: sudoku
 ---
 apiVersion: batch/v1
 kind: Job
@@ -53,8 +53,8 @@ spec:
                 sleep 5
               done
 
-              echo "Waiting for bucket sudoku-images..."
-              until mc ls minio/sudoku-images >/dev/null 2>&1; do
+              echo "Waiting for bucket ${SUDOKU_BUCKET_NAME}..."
+              until mc ls minio/${SUDOKU_BUCKET_NAME} >/dev/null 2>&1; do
                 sleep 5
               done
 
@@ -70,6 +70,9 @@ spec:
                 secretKeyRef:
                   name: storage-user
                   key: CONSOLE_SECRET_KEY
+          envFrom:
+            - configMapRef:
+                name: minio-configmap
       containers:
         - name: apply-policy
           image: minio/mc
@@ -78,7 +81,7 @@ spec:
             - |
               echo "Applying policy..."
               mc alias set minio http://minio.minio.svc.cluster.local $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
-              mc anonymous set download minio/sudoku-images
+              mc anonymous set download minio/${SUDOKU_BUCKET_NAME}
 
               mc admin user add minio "$SUDOKU_ACCESS_KEY" "$SUDOKU_SECRET_KEY" || true
               mc admin policy create minio sudoku-policy /policies/sudoku-policy.json || true
@@ -97,6 +100,8 @@ spec:
                   name: storage-user
                   key: CONSOLE_SECRET_KEY
           envFrom:
+            - configMapRef:
+                name: minio-configmap
             - secretRef:
                 name: minio-user-secrets
           volumeMounts:
