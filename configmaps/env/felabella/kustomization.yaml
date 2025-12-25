@@ -5,3 +5,4 @@ resources:
   - redis-configmaps.yaml
   - mongo-configmaps.yaml
   - kafka-configmaps.yaml
+  - minio-configmaps.yaml
