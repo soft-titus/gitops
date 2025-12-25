@@ -63,12 +63,12 @@ spec:
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
-                  name: storage-user
+                  name: admin
                   key: CONSOLE_ACCESS_KEY
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: storage-user
+                  name: admin
                   key: CONSOLE_SECRET_KEY
           envFrom:
             - configMapRef:
@@ -92,12 +92,12 @@ spec:
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
-                  name: storage-user
+                  name: admin
                   key: CONSOLE_ACCESS_KEY
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: storage-user
+                  name: admin
                   key: CONSOLE_SECRET_KEY
           envFrom:
             - configMapRef:
