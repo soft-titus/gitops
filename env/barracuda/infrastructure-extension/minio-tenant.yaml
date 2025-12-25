@@ -86,7 +86,7 @@ spec:
 
               mc admin user add minio "$BACKUP_ACCESS_KEY" "$BACKUP_SECRET_KEY" || true
               mc admin policy create minio backup-policy /policies/backup-policy.json || true
-              mc admin policy attach minio backup-policy --user "$BACKUP_SECRET_KEY" || true
+              mc admin policy attach minio backup-policy --user "$BACKUP_ACCESS_KEY" || true
 
               echo "Done."
           env:
