@@ -6,3 +6,4 @@ resources:
   - kafka-topics.yaml
   - kafka-delay-requeue.yaml
   - sudoku-puzzle-generator.yaml
+  - sudoku-image-generator.yaml

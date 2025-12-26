@@ -1,0 +1,168 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sudoku-image-generator
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: generic-microservice-helm
+    namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    fullnameOverride: "sudoku-image-generator"
+    image:
+      repository: ghcr.io/soft-titus/sudoku-image-generator # {"$imagepolicy": "flux-system:sudoku-image-generator:name"}
+      tag: 1.1.2 # {"$imagepolicy": "flux-system:sudoku-image-generator:tag"}
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+    envFrom:
+      - configMapRef:
+          name: sudoku-image-generator-configmap
+      - configMapRef:
+          name: kafka-configmap
+      - configMapRef:
+          name: mongo-configmap
+      - configMapRef:
+          name: minio-configmap
+      - secretRef:
+          name: mongo-secrets
+      - secretRef:
+          name: minio-secrets
+    serviceAccount:
+      create: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sudoku-image-generator-configmap
+  namespace: default
+data:
+  LOG_LEVEL: "INFO"
+  KAFKA_CONSUMER_GROUP_NAME: "sudoku.image.generate.group"
+  KAFKA_POOLING_INTERVAL_SECONDS: "15"
+  KAFKA_RETRIABLE_TOPIC: "retriable"
+  KAFKA_IMAGE_TOPIC: "sudoku.image.generate"
+  KAFKA_IMAGE_DLQ_TOPIC: "sudoku.image.generate.dlq"
+  MONGO_DB: "sudoku"
+  MONGO_COLLECTION_NAME: "puzzle"
+  S3_BUCKET_NAME: "sudoku"
+  TASK_MAX_RETRIES: "3"
+  TASK_BASE_BACKOFF_SECONDS: "15"
+  TASK_BASE_BACKOFF_MULTIPLIER: "2"
+  TASK_MAX_BACKOFF_SECONDS: "300"
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: sudoku-image-generator
+  namespace: flux-system
+spec:
+  image: ghcr.io/soft-titus/sudoku-image-generator
+  interval: 5m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: sudoku-image-generator
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: sudoku-image-generator
+  filterTags:
+    pattern: '.*(\-\d+)?(\-|$)[^\-\n]{0,7}$'
+  policy:
+    semver:
+      range: ">= 0.0.0 < 2.0.0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: sudoku-image-generator-scaledobject
+  namespace: default
+  labels:
+    app: sudoku-image-generator
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: sudoku-image-generator
+  minReplicaCount: 0
+  maxReplicaCount: 3
+  cooldownPeriod: 30
+  pollingInterval: 15
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+        topic: sudoku.image.generate
+        consumerGroup: "sudoku.image.generate.group"
+        lagThreshold: "1"
+        scaleToZeroOnInvalidOffset: "true"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sudoku-image-generator-kafka-heartbeat-cronjob
+  namespace: default
+spec:
+  schedule: "0 0 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: kafka-heartbeat
+              image: apache/kafka:4.1.1
+              imagePullPolicy: IfNotPresent
+              workingDir: /opt/kafka/bin
+              envFrom:
+                - configMapRef:
+                    name: kafka-configmap
+                - configMapRef:
+                    name: sudoku-image-generator-configmap
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  echo "Describing topic: ${KAFKA_IMAGE_TOPIC}"
+
+                  PARTITION_COUNT=$(./kafka-topics.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --describe \
+                    --topic "${KAFKA_IMAGE_TOPIC}" \
+                    | sed 's/^[[:space:]]*//' \
+                    | grep 'Partition:' \
+                    | wc -l)
+
+                  if [ -z "${PARTITION_COUNT}" ]; then
+                    echo "Failed to detect partition count"
+                    exit 1
+                  fi
+
+                  echo "Topic has ${PARTITION_COUNT} partitions"
+
+                  echo "Sending ${PARTITION_COUNT} heartbeat messages (round-robin)"
+
+                  for ((i=0; i<${PARTITION_COUNT}; i++)); do
+                    echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}"
+                  done | ./kafka-console-producer.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --topic "${KAFKA_IMAGE_TOPIC}" \
+                    --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+
+                  echo "Kafka heartbeat job completed successfully"

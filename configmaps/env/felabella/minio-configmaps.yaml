@@ -40,3 +40,16 @@ data:
         }
       ]
     }
+
+---
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-configmap
+  namespace: default
+data:
+  AWS_REGION: ""
+  S3_PROTOCOL: "http"
+  S3_HOST: "minio.minio.svc.cluster.local"
+  S3_PORT: "80"
