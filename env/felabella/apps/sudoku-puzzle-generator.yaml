@@ -13,7 +13,7 @@ spec:
       retries: 1
   interval: 1m0s
   values:
-    annotations:
+    podAnnotations:
       reloader.stakater.com/auto: "true"
     fullnameOverride: "sudoku-puzzle-generator"
     image:

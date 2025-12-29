@@ -13,13 +13,13 @@ spec:
       retries: 1
   interval: 1m0s
   values:
-    annotations:
+    podAnnotations:
       reloader.stakater.com/auto: "true"
     fullnameOverride: "sudoku-api"
     image:
       repository: ghcr.io/soft-titus/sudoku-api # {"$imagepolicy": "flux-system:sudoku-api:name"}
       tag: 1.1.0 # {"$imagepolicy": "flux-system:sudoku-api:tag"}
-    replicaCount: 2
+    replicaCount: 1
     resources:
       requests:
         cpu: 100m
