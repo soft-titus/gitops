@@ -127,3 +127,30 @@ spec:
       backendRefs:
         - name: sudoku-api
           port: 80
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sudoku-mongo-index
+  namespace: default
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mongo-indexer
+          image: mongodb/mongodb-community-server:7.0.28-ubi8
+          command:
+            - "sh"
+            - "-c"
+            - |
+              mongosh --host $MONGO_HOST --port $MONGO_PORT -u $MONGO_USER -p $MONGO_PASSWORD $MONGO_DBecho $MONGO_DB \
+              --eval "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({puzzleId: 1}, {unique: true});"
+          envFrom:
+            - configMapRef:
+                name: mongo-configmap
+            - secretRef:
+                name: mongo-secrets
+            - configMapRef:
+                name: sudoku-api-configmap
