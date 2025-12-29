@@ -118,7 +118,7 @@ spec:
     - name: envoy-gateway
       namespace: envoy-gateway-system
   hostnames:
-    - "er.tz"
+    - "sudoku-api.felabella.local"
   rules:
     - matches:
         - path:
