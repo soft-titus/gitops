@@ -145,7 +145,7 @@ spec:
             - "sh"
             - "-c"
             - |
-              mongosh --host $MONGO_HOST --port $MONGO_PORT -u $MONGO_USER -p $MONGO_PASSWORD $MONGO_DBecho $MONGO_DB \
+              mongosh --host $MONGO_HOST --port $MONGO_PORT -u $MONGO_USER -p $MONGO_PASSWORD $MONGO_DB \
               --eval "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({puzzleId: 1}, {unique: true});"
           envFrom:
             - configMapRef:
