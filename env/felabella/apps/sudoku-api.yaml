@@ -140,13 +140,24 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: mongo-indexer
-          image: mongodb/mongodb-community-server:7.0.28-ubi8
+          image: mongo:7.0.28
           command:
             - "sh"
             - "-c"
             - |
-              mongosh --host $MONGO_HOST --port $MONGO_PORT -u $MONGO_USER -p $MONGO_PASSWORD $MONGO_DB \
-              --eval "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({puzzleId: 1}, {unique: true});"
+              echo "Building MongoDB URI..."
+              MONGO_URI="mongodb://$MONGO_USER:$MONGO_PASSWORD@$MONGO_HOST:$MONGO_PORT/$MONGO_DB?replicaSet=mongodb&retryWrites=true&w=majority"
+
+              echo "Waiting for MongoDB primary..."
+              until mongosh "$MONGO_URI" --eval "db.hello().isWritablePrimary" --quiet | grep -q true; do
+                echo "Primary not ready yet, sleeping 2s..."
+                sleep 2
+              done
+
+              echo "MongoDB is primary. Creating index..."
+              mongosh "$MONGO_URI" --eval "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({ puzzleId: 1 }, { unique: true });"
+
+              echo "MongoDB index creation completed."
           envFrom:
             - configMapRef:
                 name: mongo-configmap
