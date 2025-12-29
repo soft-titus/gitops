@@ -81,7 +81,6 @@ spec:
             - |
               echo "Applying policy..."
               mc alias set minio http://minio.minio.svc.cluster.local $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
-              mc anonymous set download minio/${SUDOKU_BUCKET_NAME}
 
               mc admin user add minio "$SUDOKU_ACCESS_KEY" "$SUDOKU_SECRET_KEY" || true
               mc admin policy create minio sudoku-policy /policies/sudoku-policy.json || true
