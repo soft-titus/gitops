@@ -6,3 +6,4 @@ resources:
   - core-extension.yaml
   - infrastructure.yaml
   - infrastructure-extension.yaml
+  - apps.yaml

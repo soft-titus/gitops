@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: generic-microservice-helm
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: oci://ghcr.io/energywebfoundation/generic-microservice-helm
+  ref:
+    # tag: 1.3.4
+    semver: ">= 1.*"
