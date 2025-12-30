@@ -8,12 +8,6 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: traefik
-$patch: delete
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: kubernetes-dashboard
 $patch: delete
 ---
