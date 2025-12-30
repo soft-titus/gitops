@@ -66,8 +66,12 @@ spec:
           name: kafka-configmap
       - configMapRef:
           name: mongo-configmap
+      - configMapRef:
+          name: minio-configmap
       - secretRef:
           name: mongo-secrets
+      - secretRef:
+          name: minio-secrets
     serviceAccount:
       create: false
 ---
@@ -84,6 +88,7 @@ data:
   MONGO_DB: "sudoku"
   MONGO_COLLECTION_NAME: "puzzle"
   REDIS_DB: "0"
+  S3_BUCKET_NAME: "sudoku"
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
