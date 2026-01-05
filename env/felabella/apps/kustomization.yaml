@@ -8,3 +8,5 @@ resources:
   - sudoku-api.yaml
   - sudoku-puzzle-generator.yaml
   - sudoku-image-generator.yaml
+patches:
+  - path: helm-repositories-deleted.yaml

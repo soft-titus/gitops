@@ -1,4 +1,14 @@
 ---
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: titus-charts
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://soft-titus.github.io/titus-charts
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
