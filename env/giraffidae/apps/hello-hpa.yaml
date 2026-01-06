@@ -73,5 +73,20 @@ spec:
           port: 80
           containerPort: 8080
           protocol: TCP
+    httpRoute:
+      enabled: true
+      parentRefs:
+        - name: envoy-gateway
+          namespace: envoy-gateway-system
+      hostnames:
+        - hello-hpa.giraffidae.local
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: hello-hpa
+              port: 80
     serviceAccount:
       create: false
