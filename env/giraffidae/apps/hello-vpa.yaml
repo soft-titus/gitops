@@ -1,0 +1,83 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hello-vpa
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: microservice
+      # version: "0.1.0"
+      version: "0.*"
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: titus-charts
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    fullnameOverride: "hello-vpa"
+    image:
+      repository: ghcr.io/soft-titus/hello
+      tag: 1.0.0 # {"$imagepolicy": "flux-system:hello:tag"}
+      fluxImageAutoUpdate:
+        enabled: true
+        pattern: "^[1-9]+\\.[0-9]+\\.[0-9]+$"
+        semver: ">=1.0.0 <2.0.0"
+    configMaps:
+      env:
+        enabled: true
+        data:
+          LOG_LEVEL: "INFO"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 2
+      successThreshold: 1
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 2
+      successThreshold: 1
+      failureThreshold: 3
+    replicaCount: 1
+    resources: null
+    vpa:
+      enabled: true
+      updateMode: InPlaceOrRecreate
+      minReplicas: 1
+      resourcePolicy:
+        containerPolicies:
+          - containerName: "*"
+            minAllowed:
+              cpu: 50m
+              memory: 64Mi
+            maxAllowed:
+              cpu: "1"
+              memory: 1Gi
+            controlledValues: RequestsAndLimits
+            controlledResources:
+              - cpu
+              - memory
+    service:
+      enabled: true
+      ports:
+        - name: http
+          port: 80
+          containerPort: 8080
+          protocol: TCP
+    serviceAccount:
+      create: false
