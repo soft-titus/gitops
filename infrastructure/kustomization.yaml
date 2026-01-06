@@ -5,6 +5,7 @@ resources:
   - envoy-gateway.yaml
   - traefik.yaml
   - kubernetes-dashboard.yaml
+  - vpa.yaml
   - minio-operator.yaml
   - dragonfly-operator.yaml
   - cnpg-operator.yaml

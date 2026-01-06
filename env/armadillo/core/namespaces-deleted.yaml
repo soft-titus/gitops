@@ -8,6 +8,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: vpa
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: minio-operator
 $patch: delete
 ---

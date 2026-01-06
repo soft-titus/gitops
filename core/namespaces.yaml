@@ -25,6 +25,13 @@ kind: Namespace
 metadata:
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
+  name: vpa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: minio-operator
 ---
 apiVersion: v1

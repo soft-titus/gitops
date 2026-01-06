@@ -5,6 +5,7 @@ resources:
   - ../../../infrastructure
 patches:
   - path: traefik-deleted.yaml
+  - path: vpa-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: dragonfly-operator-deleted.yaml
   - path: cnpg-operator-deleted.yaml
