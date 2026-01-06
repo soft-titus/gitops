@@ -33,6 +33,8 @@ spec:
     priorityClassName: system-node-critical
     admissionController:
       enabled: true
+      extraArgs:
+        feature-gates: InPlaceOrRecreate=true
       replicas: 1
       resources:
         requests:
