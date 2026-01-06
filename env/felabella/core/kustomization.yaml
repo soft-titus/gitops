@@ -5,5 +5,4 @@ resources:
   - ../../../core
   - namespaces.yaml
 patches:
-  - path: metrics-server-deleted.yaml
   - path: namespaces-deleted.yaml
