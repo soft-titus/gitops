@@ -28,10 +28,6 @@ spec:
       ports:
         - port: 80
           name: http
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 1Gi
     readinessProbe:
       enabled: true
       httpGet:
@@ -141,7 +137,7 @@ spec:
     kind: Deployment
     name: sudoku-api
   updatePolicy:
-    updateMode: "InPlaceOrRecreate"
+    updateMode: "Recreate"
     minReplicas: 1
   resourcePolicy:
     containerPolicies:
