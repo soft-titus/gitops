@@ -93,3 +93,5 @@ spec:
                 value: /
     serviceAccount:
       create: false
+    podAnnotations:
+      reloader.stakater.com/auto: "true"

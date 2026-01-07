@@ -90,3 +90,5 @@ spec:
               port: 80
     serviceAccount:
       create: false
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
