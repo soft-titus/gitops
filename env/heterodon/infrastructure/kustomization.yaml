@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../infrastructure
+patches:
+  - path: traefik-deleted.yaml
+  - path: kubernetes-dashboard-deleted.yaml
+  - path: vpa-deleted.yaml
+  - path: minio-operator-deleted.yaml
+  - path: dragonfly-operator-deleted.yaml
+  - path: cnpg-operator-deleted.yaml
+  - path: mongodb-operator-deleted.yaml
+  - path: eck-operator-deleted.yaml
+  - path: kafka-operator-deleted.yaml
+  - path: fluentd-deleted.yaml
