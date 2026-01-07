@@ -28,6 +28,10 @@ spec:
       ports:
         - port: 80
           name: http
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
     readinessProbe:
       enabled: true
       httpGet:
