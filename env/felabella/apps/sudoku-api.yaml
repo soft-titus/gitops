@@ -20,13 +20,6 @@ spec:
       repository: ghcr.io/soft-titus/sudoku-api # {"$imagepolicy": "flux-system:sudoku-api:name"}
       tag: 1.2.5 # {"$imagepolicy": "flux-system:sudoku-api:tag"}
     replicaCount: 1
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
     container:
       ports:
         http: 8080
@@ -137,6 +130,7 @@ apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
   name: sudoku-api
+  namespace: default
 spec:
   targetRef:
     apiVersion: apps/v1
