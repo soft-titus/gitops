@@ -8,6 +8,9 @@ spec:
   values:
     global:
       domain: "argocd.irrawaddy.local"
+    configs:
+      params:
+        server.insecure: true
     server:
       httproute:
         enabled: true
