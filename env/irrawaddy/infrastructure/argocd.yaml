@@ -17,3 +17,5 @@ spec:
         parentRefs:
           - name: envoy-gateway
             namespace: envoy-gateway-system
+        hostnames:
+          - "argocd.irrawaddy.local"
