@@ -13,7 +13,7 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     cert-manager.io/cluster-issuer: "selfsigned"
-    cert-manager.io/common-name: "heterodon.local"
+    cert-manager.io/common-name: "irrawaddy.local"
     cert-manager.io/duration: "8760h"
     cert-manager.io/renew-before: "336h"
     cert-manager.io/private-key-algorithm: "RSA"
@@ -28,19 +28,19 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "heterodon.local"
+      hostname: "irrawaddy.local"
     - name: root-https
       port: 443
       protocol: HTTPS
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "heterodon.local"
+      hostname: "irrawaddy.local"
       tls:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: root-heterodon-local-tls
+            name: root-irrawaddy-local-tls
             namespace: envoy-gateway-system
     - name: http
       port: 80
@@ -48,17 +48,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "*.heterodon.local"
+      hostname: "*.irrawaddy.local"
     - name: https
       port: 443
       protocol: HTTPS
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "*.heterodon.local"
+      hostname: "*.irrawaddy.local"
       tls:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: wildcard-heterodon-local-tls
+            name: wildcard-irrawaddy-local-tls
             namespace: envoy-gateway-system

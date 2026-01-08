@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./env/heterodon/core
+  path: ./env/irrawaddy/core
   prune: true
   sourceRef:
     kind: GitRepository
