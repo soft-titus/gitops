@@ -7,6 +7,7 @@ resources:
   - kubernetes-dashboard.yaml
   - vpa.yaml
   - keda.yaml
+  - argocd.yaml
   - minio-operator.yaml
   - dragonfly-operator.yaml
   - cnpg-operator.yaml

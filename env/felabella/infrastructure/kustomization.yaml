@@ -6,6 +6,7 @@ resources:
 patches:
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
+  - path: argocd-deleted.yaml
   - path: cnpg-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
   - path: fluentd-deleted.yaml

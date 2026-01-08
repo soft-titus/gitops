@@ -1,0 +1,16 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  values:
+    global:
+      domain: "argocd.irrawaddy.local"
+    server:
+      httproute:
+        enabled: true
+        parentRefs:
+          - name: envoy-gateway
+            namespace: envoy-gateway-system

@@ -8,6 +8,7 @@ patches:
   - path: kubernetes-dashboard-deleted.yaml
   - path: vpa-deleted.yaml
   - path: keda-deleted.yaml
+  - path: argocd-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: mongodb-operator-deleted.yaml
   - path: eck-operator-deleted.yaml

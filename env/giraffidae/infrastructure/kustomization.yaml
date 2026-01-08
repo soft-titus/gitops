@@ -7,6 +7,7 @@ patches:
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
   - path: keda-deleted.yaml
+  - path: argocd-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: dragonfly-operator-deleted.yaml
   - path: cnpg-operator-deleted.yaml

@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../../infrastructure
 patches:
+  - path: argocd.yaml
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
   - path: vpa-deleted.yaml
