@@ -40,3 +40,9 @@ kind: Namespace
 metadata:
   name: kafka-operator
 $patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus
+$patch: delete

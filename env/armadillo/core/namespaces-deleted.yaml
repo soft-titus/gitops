@@ -62,5 +62,11 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: prometheus
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: reloader
 $patch: delete

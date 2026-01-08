@@ -13,3 +13,4 @@ patches:
   - path: eck-operator-deleted.yaml
   - path: kafka-operator-deleted.yaml
   - path: fluentd-deleted.yaml
+  - path: prometheus-stack-deleted.yaml

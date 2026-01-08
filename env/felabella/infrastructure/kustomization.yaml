@@ -9,3 +9,4 @@ patches:
   - path: cnpg-operator-deleted.yaml
   - path: eck-operator-deleted.yaml
   - path: fluentd-deleted.yaml
+  - path: prometheus-stack-deleted.yaml

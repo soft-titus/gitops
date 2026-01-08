@@ -14,4 +14,5 @@ resources:
   - eck-operator.yaml
   - kafka-operator.yaml
   - fluentd.yaml
+  - prometheus-stack.yaml
   - reloader.yaml

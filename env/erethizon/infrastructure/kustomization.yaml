@@ -12,3 +12,4 @@ patches:
   - path: minio-operator-deleted.yaml
   - path: mongodb-operator-deleted.yaml
   - path: kafka-operator-deleted.yaml
+  - path: prometheus-stack-deleted.yaml

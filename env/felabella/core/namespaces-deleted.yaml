@@ -28,3 +28,9 @@ kind: Namespace
 metadata:
   name: fluentd-system
 $patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus
+$patch: delete
