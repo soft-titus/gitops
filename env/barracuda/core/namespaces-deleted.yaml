@@ -26,6 +26,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: argocd
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: dragonfly-operator-system
 $patch: delete
 ---

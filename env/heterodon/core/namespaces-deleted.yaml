@@ -20,6 +20,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: argocd
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: minio-operator
 $patch: delete
 ---

@@ -14,6 +14,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: argocd
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: cnpg-system
 $patch: delete
 ---
