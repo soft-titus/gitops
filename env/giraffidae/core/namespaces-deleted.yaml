@@ -14,6 +14,12 @@ $patch: delete
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: keda
+$patch: delete
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: minio-operator
 $patch: delete
 ---

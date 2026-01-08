@@ -7,5 +7,4 @@ resources:
   - metallb.yaml
   - cert-manager.yaml
   - longhorn.yaml
-  - keda.yaml
   - service-accounts.yaml

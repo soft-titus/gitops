@@ -6,6 +6,7 @@ resources:
   - traefik.yaml
   - kubernetes-dashboard.yaml
   - vpa.yaml
+  - keda.yaml
   - minio-operator.yaml
   - dragonfly-operator.yaml
   - cnpg-operator.yaml

@@ -5,5 +5,4 @@ resources:
   - ../../../core
 patches:
   - path: longhorn-deleted.yaml
-  - path: keda-deleted.yaml
   - path: namespaces-deleted.yaml

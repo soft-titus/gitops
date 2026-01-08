@@ -6,5 +6,4 @@ resources:
 patches:
   - path: metrics-server-deleted.yaml
   - path: longhorn-deleted.yaml
-  - path: keda-deleted.yaml
   - path: namespaces-deleted.yaml

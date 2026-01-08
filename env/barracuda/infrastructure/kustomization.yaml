@@ -9,6 +9,7 @@ patches:
   - path: envoy-gateway-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
   - path: vpa-deleted.yaml
+  - path: keda-deleted.yaml
   - path: dragonfly-operator-deleted.yaml
   - path: cnpg-operator-deleted.yaml
   - path: mongodb-operator-deleted.yaml
