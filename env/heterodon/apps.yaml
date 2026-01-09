@@ -14,6 +14,19 @@ spec:
   dependsOn:
     - name: infrastructure-extension
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: apps-repository
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/soft-titus/argocd-apps.git
+---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:
@@ -23,7 +36,7 @@ spec:
   interval: 1m0s
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: apps-repository
   git:
     checkout:
       ref:
@@ -56,5 +69,5 @@ spec:
     push:
       branch: main
   update:
-    path: ./env/heterodon/apps
+    path: ./env/heterodon
     strategy: Setters
