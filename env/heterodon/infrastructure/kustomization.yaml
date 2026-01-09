@@ -7,7 +7,6 @@ patches:
   - path: argocd.yaml
   - path: traefik-deleted.yaml
   - path: kubernetes-dashboard-deleted.yaml
-  - path: vpa-deleted.yaml
   - path: keda-deleted.yaml
   - path: minio-operator-deleted.yaml
   - path: dragonfly-operator-deleted.yaml
@@ -17,4 +16,3 @@ patches:
   - path: kafka-operator-deleted.yaml
   - path: fluentd-deleted.yaml
   - path: prometheus-stack-deleted.yaml
-  - path: reloader-deleted.yaml
