@@ -28,3 +28,7 @@ spec:
       kind: HorizontalPodAutoscaler
     - group: autoscaling.k8s.io
       kind: VerticalPodAutoscaler
+    - group: image.toolkit.fluxcd.io
+      kind: ImageRepository
+    - group: image.toolkit.fluxcd.io
+      kind: ImagePolicy
