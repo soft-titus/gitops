@@ -22,3 +22,7 @@ spec:
       kind: ConfigMap
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
+    - group: autoscaling.k8s.io
+      kind: VerticalPodAutoscaler
