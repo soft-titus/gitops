@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/soft-titus/argocd-apps
+    repoURL: git@github.com:soft-titus/argocd-apps.git
     path: env/heterodon
     targetRevision: main
   destination:
