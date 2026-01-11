@@ -9,6 +9,8 @@ spec:
   source:
     repoURL: git@github.com:soft-titus/argocd-apps.git
     path: env/heterodon
+    directory:
+      recurse: true
     targetRevision: main
   destination:
     server: https://kubernetes.default.svc
