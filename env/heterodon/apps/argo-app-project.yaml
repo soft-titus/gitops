@@ -28,3 +28,5 @@ spec:
       kind: HorizontalPodAutoscaler
     - group: autoscaling.k8s.io
       kind: VerticalPodAutoscaler
+    - group: argocd-image-updater.argoproj.io
+      kind: ImageUpdater
