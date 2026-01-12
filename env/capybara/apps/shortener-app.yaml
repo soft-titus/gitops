@@ -18,7 +18,7 @@ spec:
     fullnameOverride: "shortener-app"
     image:
       repository: ghcr.io/soft-titus/shortener # {"$imagepolicy": "flux-system:shortener-app:name"}
-      tag: 1.0.0-dev-1764993388 # {"$imagepolicy": "flux-system:shortener-app:tag"}
+      tag: 1.0.1-dev-1767093920 # {"$imagepolicy": "flux-system:shortener-app:tag"}
     replicaCount: 2
     resources:
       requests:
@@ -145,7 +145,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: cron
-              image: ghcr.io/soft-titus/shortener:1.0.0-dev-1764993388 # {"$imagepolicy": "flux-system:shortener-app"}
+              image: ghcr.io/soft-titus/shortener:1.0.1-dev-1767093920 # {"$imagepolicy": "flux-system:shortener-app"}
               imagePullPolicy: IfNotPresent
               command: ["python", "-m", "app.cron.flush_visits"]
               envFrom:
