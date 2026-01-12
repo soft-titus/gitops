@@ -18,3 +18,4 @@ flux bootstrap git \
   --path=env/<cluster-name> \
   --private-key-file=$HOME/.ssh/<private-key> \
   --password <ssh-key-passphrase>
+```
