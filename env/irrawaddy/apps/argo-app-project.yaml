@@ -24,5 +24,9 @@ spec:
       kind: ConfigMap
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+    - group: keda.sh
+      kind: ScaledObject
     - group: argocd-image-updater.argoproj.io
       kind: ImageUpdater
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
