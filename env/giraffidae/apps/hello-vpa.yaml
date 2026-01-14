@@ -23,7 +23,7 @@ spec:
     fullnameOverride: "hello-vpa"
     image:
       repository: ghcr.io/soft-titus/hello
-      tag: 0.0.0 # {"$imagepolicy": "flux-system:hello-vpa:tag"}
+      tag: "0.0.0" # {"$imagepolicy": "flux-system:hello-vpa:tag"}
       fluxImageAutoUpdate:
         enabled: true
         pattern: "^[1-9]+\\.[0-9]+\\.[0-9]+$"
