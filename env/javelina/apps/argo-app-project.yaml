@@ -1,0 +1,54 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: kafka
+  namespace: argocd
+spec:
+  description: Project for kafka apps
+  sourceRepos:
+    - git@github.com:soft-titus/argocd-apps.git
+    - https://soft-titus.github.io/titus-charts
+  destinations:
+    - namespace: default
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: apps
+      kind: Deployment
+    - group: ""
+      kind: ConfigMap
+    - group: keda.sh
+      kind: ScaledObject
+    - group: argocd-image-updater.argoproj.io
+      kind: ImageUpdater
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: sudoku
+  namespace: argocd
+spec:
+  description: Project for sudoku apps
+  sourceRepos:
+    - git@github.com:soft-titus/argocd-apps.git
+    - https://soft-titus.github.io/titus-charts
+  destinations:
+    - namespace: sudoku
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: apps
+      kind: Deployment
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+    - group: keda.sh
+      kind: ScaledObject
+    - group: argocd-image-updater.argoproj.io
+      kind: ImageUpdater
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
