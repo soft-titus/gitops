@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: git@github.com:soft-titus/argocd-apps.git
-    path: env/javelina/kafka
+    path: env/javelina/projects/kafka
     directory:
       recurse: true
     targetRevision: main
@@ -29,7 +29,7 @@ spec:
   project: default
   source:
     repoURL: git@github.com:soft-titus/argocd-apps.git
-    path: env/javelina/sudoku
+    path: env/javelina/projects/sudoku
     directory:
       recurse: true
     targetRevision: main

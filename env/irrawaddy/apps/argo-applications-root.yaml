@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: git@github.com:soft-titus/argocd-apps.git
-    path: env/irrawaddy
+    path: env/irrawaddy/projects/hello
     directory:
       recurse: true
     targetRevision: main
