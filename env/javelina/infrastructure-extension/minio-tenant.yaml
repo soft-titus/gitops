@@ -1,0 +1,149 @@
+---
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  requestAutoCert: false
+  configuration:
+    name: storage-configuration
+  mountPath: /export
+  pools:
+    - name: pool-0
+      servers: 4
+      volumesPerServer: 1
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 8Gi
+          storageClassName: default
+  users:
+    - name: admin
+  buckets:
+    - name: sudoku
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: set-bucket-policy
+  namespace: minio
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: policy-volume
+          configMap:
+            name: minio-policy-configmap
+            items:
+              - key: sudoku-policy.json
+                path: sudoku-policy.json
+      initContainers:
+        - name: wait-for-bucket
+          image: minio/mc
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for MinIO..."
+              until mc alias set minio http://minio.minio.svc.cluster.local $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD; do
+                sleep 5
+              done
+
+              echo "Waiting for bucket ${SUDOKU_BUCKET_NAME}..."
+              until mc ls minio/${SUDOKU_BUCKET_NAME} >/dev/null 2>&1; do
+                sleep 5
+              done
+
+              echo "Bucket ready."
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: admin
+                  key: CONSOLE_ACCESS_KEY
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admin
+                  key: CONSOLE_SECRET_KEY
+          envFrom:
+            - configMapRef:
+                name: minio-configmap
+      containers:
+        - name: apply-policy
+          image: minio/mc
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Applying policy..."
+              mc alias set minio http://minio.minio.svc.cluster.local $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
+
+              mc admin user add minio "$SUDOKU_ACCESS_KEY" "$SUDOKU_SECRET_KEY" || true
+              mc admin policy create minio sudoku-policy /policies/sudoku-policy.json || true
+              mc admin policy attach minio sudoku-policy --user "$SUDOKU_ACCESS_KEY" || true
+
+              echo "Done."
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: admin
+                  key: CONSOLE_ACCESS_KEY
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admin
+                  key: CONSOLE_SECRET_KEY
+          envFrom:
+            - configMapRef:
+                name: minio-configmap
+            - secretRef:
+                name: minio-user-secrets
+          volumeMounts:
+            - name: policy-volume
+              mountPath: /policies
+              readOnly: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: minio-console
+  namespace: minio
+spec:
+  parentRefs:
+    - name: envoy-gateway
+      namespace: envoy-gateway-system
+  hostnames:
+    - "minio-console.javelina.local"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: minio-console
+          port: 9090
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  parentRefs:
+    - name: envoy-gateway
+      namespace: envoy-gateway-system
+  hostnames:
+    - "minio.javelina.local"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: minio
+          port: 80

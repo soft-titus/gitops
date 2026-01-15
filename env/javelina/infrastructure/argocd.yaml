@@ -1,0 +1,21 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  values:
+    global:
+      domain: "argocd.javelina.local"
+    configs:
+      params:
+        server.insecure: true
+    server:
+      httproute:
+        enabled: true
+        parentRefs:
+          - name: envoy-gateway
+            namespace: envoy-gateway-system
+        hostnames:
+          - "argocd.javelina.local"
