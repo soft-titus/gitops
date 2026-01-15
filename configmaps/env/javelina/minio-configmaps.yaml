@@ -47,7 +47,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: minio-configmap
-  namespace: default
+  namespace: sudoku
 data:
   AWS_REGION: ""
   S3_PROTOCOL: "http"
