@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: dragonfly
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: mongodb
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: kafka
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  name: minio

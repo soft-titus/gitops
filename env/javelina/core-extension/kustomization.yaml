@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - metallb-ippool.yaml
   - ca-issuer.yaml
+  - default-storage-class.yaml
