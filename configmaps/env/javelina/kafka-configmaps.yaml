@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-configmap
+  namespace: default
+data:
+  KAFKA_BROKER_HOST: "kafka-kafka-bootstrap.kafka.svc.cluster.local"
+  KAFKA_BROKER_PORT: "9092"
