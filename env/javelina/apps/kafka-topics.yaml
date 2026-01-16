@@ -1,0 +1,90 @@
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: retriable
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: retriable
+  partitions: 1
+  replicas: 3
+  config:
+    retention.ms: 86400000  # 1-day
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: retriable-dlq
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: retriable.dlq
+  partitions: 1
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7-days
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: sudoku-puzzle-generate
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: sudoku.puzzle.generate
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 86400000  # 1-day
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: sudoku-puzzle-generate-dlq
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: sudoku.puzzle.generate.dlq
+  partitions: 1
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7-days
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: sudoku-image-generate
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: sudoku.image.generate
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 86400000  # 1-day
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: sudoku-image-generate-dlq
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  topicName: sudoku.image.generate.dlq
+  partitions: 1
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7-days
+    cleanup.policy: delete
