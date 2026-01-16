@@ -28,6 +28,8 @@ metadata:
 spec:
   values:
     config:
+      log:
+        level: "debug""
       registries:
         - name: GitHub Container Registry
           api_url: https://ghcr.io
