@@ -6,5 +6,6 @@ resources:
   - argo-app-project.yaml
   - argo-applications-root.yaml
   - kafka-topics.yaml
+  - cronjobs.yaml
 patches:
   - path: helm-repositories-deleted.yaml
