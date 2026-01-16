@@ -34,4 +34,4 @@ spec:
           api_url: https://ghcr.io
           prefix: ghcr.io
           ping: true
-          credentials: secret:argocd/ghcr-credential-secrets
+          credentials: secret:argocd/ghcr-credential-secrets#creds
