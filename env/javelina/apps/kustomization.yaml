@@ -8,5 +8,6 @@ resources:
   - kafka-topics.yaml
   - kafka-delay-requeue-jobs.yaml
   - sudoku-puzzle-generator-jobs.yaml
+  - sudoku-image-generator.yaml
 patches:
   - path: helm-repositories-deleted.yaml

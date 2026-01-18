@@ -1,0 +1,156 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sudoku-image-generator-kafka-heartbeat-cronjob
+  namespace: sudoku
+spec:
+  schedule: "0 0 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: wait-for-kafka-topic
+              image: apache/kafka:4.1.1
+              imagePullPolicy: IfNotPresent
+              workingDir: /opt/kafka/bin
+              envFrom:
+                - configMapRef:
+                    name: kafka-configmap
+                - configMapRef:
+                    name: sudoku-image-generator-env
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  echo "Waiting for Kafka topic ${KAFKA_IMAGE_TOPIC} to be ready..."
+                  while true; do
+                    PARTITION_COUNT=$(./kafka-topics.sh \
+                      --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                      --describe \
+                      --topic "${KAFKA_IMAGE_TOPIC}" 2>/dev/null \
+                      | sed 's/^[[:space:]]*//' \
+                      | grep 'Partition:' \
+                      | wc -l)
+
+                    if [ -n "${PARTITION_COUNT}" ] && [ "${PARTITION_COUNT}" -gt 0 ]; then
+                      echo "Topic ${KAFKA_IMAGE_TOPIC} is ready with ${PARTITION_COUNT} partitions"
+                      break
+                    else
+                      echo "Topic not ready yet. Retrying in 10s..."
+                      sleep 10
+                    fi
+                  done
+
+          containers:
+            - name: kafka-heartbeat
+              image: apache/kafka:4.1.1
+              imagePullPolicy: IfNotPresent
+              workingDir: /opt/kafka/bin
+              envFrom:
+                - configMapRef:
+                    name: kafka-configmap
+                - configMapRef:
+                    name: sudoku-image-generator-env
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  echo "Sending heartbeat messages..."
+                  PARTITION_COUNT=$(./kafka-topics.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --describe \
+                    --topic "${KAFKA_IMAGE_TOPIC}" \
+                    | sed 's/^[[:space:]]*//' \
+                    | grep 'Partition:' \
+                    | wc -l)
+
+                  for ((i=0; i<${PARTITION_COUNT}; i++)); do
+                    echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}"
+                  done | ./kafka-console-producer.sh \
+                    --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                    --topic "${KAFKA_IMAGE_TOPIC}" \
+                    --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+
+                  echo "Kafka heartbeat job completed successfully"
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sudoku-image-generator-kafka-heartbeat-job
+  namespace: sudoku
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      initContainers:
+        - name: wait-for-kafka-topic
+          image: apache/kafka:4.1.1
+          imagePullPolicy: IfNotPresent
+          workingDir: /opt/kafka/bin
+          envFrom:
+            - configMapRef:
+                name: kafka-configmap
+            - configMapRef:
+                name: sudoku-image-generator-env
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              echo "Waiting for Kafka topic ${KAFKA_IMAGE_TOPIC} to be ready..."
+              while true; do
+                PARTITION_COUNT=$(./kafka-topics.sh \
+                  --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                  --describe \
+                  --topic "${KAFKA_IMAGE_TOPIC}" 2>/dev/null \
+                  | sed 's/^[[:space:]]*//' \
+                  | grep 'Partition:' \
+                  | wc -l)
+
+                if [ -n "${PARTITION_COUNT}" ] && [ "${PARTITION_COUNT}" -gt 0 ]; then
+                  echo "Topic ${KAFKA_IMAGE_TOPIC} is ready with ${PARTITION_COUNT} partitions"
+                  break
+                else
+                  echo "Topic not ready yet. Retrying in 10s..."
+                  sleep 10
+                fi
+              done
+
+      containers:
+        - name: kafka-heartbeat
+          image: apache/kafka:4.1.1
+          imagePullPolicy: IfNotPresent
+          workingDir: /opt/kafka/bin
+          envFrom:
+            - configMapRef:
+                name: kafka-configmap
+            - configMapRef:
+                name: sudoku-image-generator-env
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              echo "Sending heartbeat messages..."
+              PARTITION_COUNT=$(./kafka-topics.sh \
+                --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                --describe \
+                --topic "${KAFKA_IMAGE_TOPIC}" \
+                | sed 's/^[[:space:]]*//' \
+                | grep 'Partition:' \
+                | wc -l)
+
+              for ((i=0; i<${PARTITION_COUNT}; i++)); do
+                echo "{\"type\":\"heartbeat\",\"source\":\"cronjob\",\"ts\":\"$(date -Iseconds)\"}"
+              done | ./kafka-console-producer.sh \
+                --bootstrap-server "${KAFKA_BROKER_HOST}:${KAFKA_BROKER_PORT}" \
+                --topic "${KAFKA_IMAGE_TOPIC}" \
+                --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+
+              echo "Kafka heartbeat job completed successfully"
