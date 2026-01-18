@@ -7,5 +7,6 @@ resources:
   - argo-applications-root.yaml
   - kafka-topics.yaml
   - kafka-delay-requeue-jobs.yaml
+  - sudoku-puzzle-generator-jobs.yaml
 patches:
   - path: helm-repositories-deleted.yaml
