@@ -170,24 +170,45 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
+      initContainers:
+        - name: wait-for-mongo-primary
+          image: mongo:7.0.28
+          command:
+            - sh
+            - -c
+            - |
+              echo "Building MongoDB URI..."
+              MONGO_URI="mongodb://$MONGO_USER:$MONGO_PASSWORD@$MONGO_HOST:$MONGO_PORT/$MONGO_DB?$MONGO_OPTIONS"
+
+              echo "Waiting for MongoDB primary..."
+              while true; do
+                if mongosh "$MONGO_URI" --quiet --eval "db.hello().isWritablePrimary" | grep -q true; then
+                  echo "MongoDB primary is ready"
+                  break
+                fi
+                echo "Primary not ready yet, sleeping 2s..."
+                sleep 2
+              done
+          envFrom:
+            - configMapRef:
+                name: mongo-configmap
+            - secretRef:
+                name: mongo-secrets
+            - configMapRef:
+                name: sudoku-api-configmap
       containers:
         - name: mongo-indexer
           image: mongo:7.0.28
           command:
-            - "sh"
-            - "-c"
+            - sh
+            - -c
             - |
               echo "Building MongoDB URI..."
               MONGO_URI="mongodb://$MONGO_USER:$MONGO_PASSWORD@$MONGO_HOST:$MONGO_PORT/$MONGO_DB?replicaSet=mongodb&retryWrites=true&w=majority"
 
-              echo "Waiting for MongoDB primary..."
-              until mongosh "$MONGO_URI" --eval "db.hello().isWritablePrimary" --quiet | grep -q true; do
-                echo "Primary not ready yet, sleeping 2s..."
-                sleep 2
-              done
-
-              echo "MongoDB is primary. Creating index..."
-              mongosh "$MONGO_URI" --eval "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({ puzzleId: 1 }, { unique: true });"
+              echo "Creating index..."
+              mongosh "$MONGO_URI" --eval \
+                "db.getCollection('$MONGO_COLLECTION_NAME').createIndex({ puzzleId: 1 }, { unique: true });"
 
               echo "MongoDB index creation completed."
           envFrom:
