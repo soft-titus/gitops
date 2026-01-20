@@ -8,3 +8,4 @@ resources:
   - mongodb.yaml
   - kafka.yaml
   - prometheus-dashboard-httproute.yaml
+  - alertmanager-silence-overcommit-config.yaml

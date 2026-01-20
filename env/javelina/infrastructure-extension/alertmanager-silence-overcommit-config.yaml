@@ -1,0 +1,30 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: silence-overcommit
+  namespace: prometheus
+spec:
+  route:
+    receiver: "null"
+  receivers:
+    - name: "null"
+  inhibitRules:
+    - sourceMatch:
+        - name: alertname
+          value: KubeCPUOverCommit
+          matchType: "="
+      targetMatch:
+        - name: alertname
+          value: KubeCPUOverCommit
+          matchType: "="
+      equal: ["alertname"]
+    - sourceMatch:
+        - name: alertname
+          value: KubeMemoryOverCommit
+          matchType: "="
+      targetMatch:
+        - name: alertname
+          value: KubeMemoryOverCommit
+          matchType: "="
+      equal: ["alertname"]
