@@ -1,0 +1,12 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prometheus-stack
+  namespace: prometheus
+spec:
+  values:
+    alertmanager:
+      enabled: true
+      alertmanagerSpec:
+      configSecret: alertmanager-secrets
