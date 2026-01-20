@@ -20,3 +20,5 @@ spec:
                   storage: 1Gi
     kubeEtcd:
       enabled: false
+    kubeControllerManager:
+      enabled: false
