@@ -9,4 +9,12 @@ spec:
     alertmanager:
       enabled: true
       alertmanagerSpec:
-      configSecret: alertmanager-secrets
+        useExistingSecret: true
+        configSecret: alertmanager-secrets
+        storage:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 1Gi
