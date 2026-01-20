@@ -18,7 +18,19 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-    kubeEtcd:
+    kubeApiServer:
+      enabled: false
+    kubelet:
       enabled: false
     kubeControllerManager:
+      enabled: false
+    coreDns:
+      enabled: false
+    kubeEtcd:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    kubeProxy:
+      enabled: false
+    kubeStateMetrics:
       enabled: false
