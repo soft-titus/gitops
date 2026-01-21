@@ -43,7 +43,7 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 1Gi
     limits:
       cpu: 1000m
       memory: 2Gi
@@ -81,7 +81,5 @@ spec:
       default.replication.factor: 3
       min.insync.replicas: 2
   entityOperator:
-    topicOperator:
-      bootstrapServers: kafka-kafka-bootstrap:9092
-    userOperator:
-      bootstrapServers: kafka-kafka-bootstrap:9092
+    topicOperator: {}
+    userOperator: {}
