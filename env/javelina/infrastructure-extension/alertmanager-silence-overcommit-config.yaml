@@ -12,19 +12,19 @@ spec:
   inhibitRules:
     - sourceMatch:
         - name: alertname
-          value: KubeCPUOverCommit
+          value: KubeCPUOvercommit
           matchType: "="
       targetMatch:
         - name: alertname
-          value: KubeCPUOverCommit
+          value: KubeCPUOvercommit
           matchType: "="
       equal: ["alertname"]
     - sourceMatch:
         - name: alertname
-          value: KubeMemoryOverCommit
+          value: KubeMemoryOvercommit
           matchType: "="
       targetMatch:
         - name: alertname
-          value: KubeMemoryOverCommit
+          value: KubeMemoryOvercommit
           matchType: "="
       equal: ["alertname"]
