@@ -10,3 +10,4 @@ resources:
   - prometheus-dashboard-httproute.yaml
   - prometheus-rule-node-cpu-utilization.yaml
   - prometheus-rule-node-memory-utilization.yaml
+  - prometheus-rule-pvc-free-space.yaml
