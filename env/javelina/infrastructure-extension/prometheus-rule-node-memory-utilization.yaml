@@ -24,7 +24,7 @@ spec:
             severity: warning
           annotations:
             summary: "High memory usage on node {{ $labels.node }}"
-            description: "Node {{ $labels.node }} memory usage is above 85% for more than 5 minutes."
+            description: "Node {{ $labels.node }} memory usage is above 80% for more than 5 minutes."
         - alert: NodeMemoryCriticalUsage
           expr: |
             100 * (
@@ -40,4 +40,4 @@ spec:
             severity: critical
           annotations:
             summary: "Critical memory usage on node {{ $labels.node }}"
-            description: "Node {{ $labels.node }} memory usage is above 95% for more than 5 minutes."
+            description: "Node {{ $labels.node }} memory usage is above 90% for more than 5 minutes."
