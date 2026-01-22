@@ -1,0 +1,38 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-cpu-utilization-rule
+  namespace: prometheus
+  labels:
+    release: prometheus-stack
+spec:
+  groups:
+    - name: node.cpu.utilization
+      rules:
+        - alert: NodeCPUHighUsage
+          expr: |
+            100 * (
+              1 - avg by (node) (
+                rate(node_cpu_seconds_total{mode="idle"}[5m])
+              )
+            ) > 85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage on node {{ $labels.node }}"
+            description: "Node {{ $labels.node }} CPU usage is above 80% for more than 5 minutes."
+        - alert: NodeCPUCriticalUsage
+          expr: |
+            100 * (
+              1 - avg by (node) (
+                rate(node_cpu_seconds_total{mode="idle"}[5m])
+              )
+            ) > 95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Critical CPU usage on node {{ $labels.node }}"
+            description: "Node {{ $labels.node }} CPU usage is above 90% for more than 5 minutes."

@@ -1,0 +1,43 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-memory-utilization-rule
+  namespace: prometheus
+  labels:
+    release: prometheus-stack
+spec:
+  groups:
+    - name: node.memory.utilization
+      rules:
+        - alert: NodeMemoryHighUsage
+          expr: |
+            100 * (
+              1 -
+              (
+                avg by (node) (node_memory_MemAvailable_bytes)
+                /
+                avg by (node) (node_memory_MemTotal_bytes)
+              )
+            ) > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage on node {{ $labels.node }}"
+            description: "Node {{ $labels.node }} memory usage is above 85% for more than 5 minutes."
+        - alert: NodeMemoryCriticalUsage
+          expr: |
+            100 * (
+              1 -
+              (
+                avg by (node) (node_memory_MemAvailable_bytes)
+                /
+                avg by (node) (node_memory_MemTotal_bytes)
+              )
+            ) > 90
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Critical memory usage on node {{ $labels.node }}"
+            description: "Node {{ $labels.node }} memory usage is above 95% for more than 5 minutes."

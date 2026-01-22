@@ -8,3 +8,5 @@ resources:
   - mongodb.yaml
   - kafka.yaml
   - prometheus-dashboard-httproute.yaml
+  - prometheus-rule-node-cpu-utilization.yaml
+  - prometheus-rule-node-memory-utilization.yaml
