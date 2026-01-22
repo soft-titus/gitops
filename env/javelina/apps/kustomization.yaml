@@ -10,5 +10,6 @@ resources:
   - sudoku-mongo-index-jobs.yaml
   - sudoku-puzzle-generator-jobs.yaml
   - sudoku-image-generator.yaml
+  - prometheus-rule-sudoku-api-http-error-rates.yaml
 patches:
   - path: helm-repositories-deleted.yaml

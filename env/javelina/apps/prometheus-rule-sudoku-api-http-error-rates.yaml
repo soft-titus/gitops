@@ -1,0 +1,52 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: sudoku-api-http-error-rates-rule
+  namespace: prometheus
+  labels:
+    release: prometheus-stack
+spec:
+  groups:
+    - name: sudoku-api.http.errors
+      rules:
+        - alert: SudokuAPI4xxErrorRate
+          expr: |
+            (
+              sum by (pod, instance) (
+                rate(http_requests_total{service="sudoku-api", status=~"4.."}[5m])
+              )
+              /
+              sum by (pod, instance) (
+                rate(http_requests_total{service="sudoku-api"}[5m])
+              )
+            ) * 100 > 5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Sudoku API 4xx error rate high on {{ $labels.pod }}"
+            description: |
+              Pod {{ $labels.pod }} in instance {{ $labels.instance }} serving Sudoku API
+              has a 4xx error rate above 5% over the last 5 minutes.
+              Please investigate client error patterns.
+        - alert: SudokuAPI5xxErrorRate
+          expr: |
+            (
+              sum by (pod, instance) (
+                rate(http_requests_total{service="sudoku-api", status=~"5.."}[5m])
+              )
+              /
+              sum by (pod, instance) (
+                rate(http_requests_total{service="sudoku-api"}[5m])
+              )
+            ) * 100 > 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sudoku API 5xx error rate critical on {{ $labels.pod }}"
+            description: |
+              Pod {{ $labels.pod }} in instance {{ $labels.instance }} serving Sudoku API
+              has a 5xx error rate above 1% over the last 5 minutes.
+              Immediate investigation recommended.
