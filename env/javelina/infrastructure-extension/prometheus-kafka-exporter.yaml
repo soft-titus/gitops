@@ -27,7 +27,7 @@ spec:
     kafkaLabels:
       cluster: kafka
       namespace: kafka
-    verbosity: 1
+    verbosity: 3
     resources:
       requests:
         cpu: 50m
