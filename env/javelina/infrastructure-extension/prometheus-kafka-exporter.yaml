@@ -45,5 +45,9 @@ spec:
         interval: 30s
         additionalLabels:
           release: prometheus-stack
+        selector:
+          matchLabels:
+            app: prometheus-kafka-exporter
+            release: kafka-exporter
         targetLabels:
           - cluster
