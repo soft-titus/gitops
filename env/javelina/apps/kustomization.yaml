@@ -11,5 +11,6 @@ resources:
   - sudoku-puzzle-generator-jobs.yaml
   - sudoku-image-generator.yaml
   - prometheus-rule-sudoku-api-http-error-rates.yaml
+  - prometheus-rule-kafka-consumer-lag.yaml
 patches:
   - path: helm-repositories-deleted.yaml
