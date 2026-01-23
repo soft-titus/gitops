@@ -1,3 +1,4 @@
+---
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -7,17 +8,17 @@ metadata:
     release: prometheus-stack
 spec:
   groups:
-  - name: kafka.consumer-lag
-    rules:
-    - alert: KafkaConsumerStalled
-      expr: |
-        kafka_consumergroup_lag_sum > 0
-        and delta(kafka_consumergroup_lag_sum[5m]) >= 0
-      for: 5m
-      labels:
-        severity: critical
-      annotations:
-        summary: "Consumer group {{ $labels.consumergroup }} stalled on topic {{ $labels.topic }}"
-        description: |
-          The consumer group '{{ $labels.consumergroup }}' for topic '{{ $labels.topic }}' has a lag of {{ $value }} messages
-          and has not decreased in the last 5 minutes. This indicates that no messages are being consumed.
+    - name: kafka.consumer-lag
+      rules:
+        - alert: KafkaConsumerStalled
+          expr: |
+            kafka_consumergroup_lag_sum > 0
+            and delta(kafka_consumergroup_lag_sum[5m]) >= 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Consumer group {{ $labels.consumergroup }} stalled on topic {{ $labels.topic }}"
+            description: |
+              The consumer group '{{ $labels.consumergroup }}' for topic '{{ $labels.topic }}' has a lag of {{ $value }} messages
+              and has not decreased in the last 5 minutes. This indicates that no messages are being consumed.
