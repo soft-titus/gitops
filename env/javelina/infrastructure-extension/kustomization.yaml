@@ -7,6 +7,7 @@ resources:
   - dragonfly.yaml
   - mongodb.yaml
   - kafka.yaml
+  - prometheus-kafka-exporter.yaml
   - prometheus-dashboard-httproute.yaml
   - prometheus-rule-node-cpu-utilization.yaml
   - prometheus-rule-node-memory-utilization.yaml
