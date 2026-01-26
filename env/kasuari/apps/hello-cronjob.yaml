@@ -36,7 +36,7 @@ spec:
       ttlSecondsAfterFinished: 86400
       image:
         repository: public.ecr.aws/docker/library/busybox
-        tag: 1.37.0 # {"$imagepolicy": "flux-system:hello-cronjob:tag"}
+        tag: 0.0.0 # {"$imagepolicy": "flux-system:hello-cronjob:tag"}
         pullPolicy: IfNotPresent
         fluxImageAutoUpdate:
           enabled: true
