@@ -1,0 +1,62 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hello-cronjob
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: job
+      # version: "0.0.1"
+      version: "0.*"
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: titus-charts
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 1
+  interval: 1m0s
+  values:
+    enabled: true
+    fullnameOverride: "hello-cronjob"
+    job:
+      enabled: true
+    cronJob:
+      enabled: true
+      suspend: false
+      schedule: "0 0 * * *"
+      concurrencyPolicy: "Forbid"
+      failedJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 1
+    jobTemplate:
+      activeDeadlineSeconds: 60
+      backoffLimit: 3
+      ttlSecondsAfterFinished: 86400
+      image:
+        repository: public.ecr.aws/docker/library/busybox
+        tag: 0.0.0 # {"$imagepolicy": "flux-system:hello-cronjob:tag"}
+        pullPolicy: IfNotPresent
+        fluxImageAutoUpdate:
+          enabled: true
+          namespace: flux-system
+          pattern: "^[1-9]+\\.[0-9]+\\.[0-9]+$"
+          semver: ">=1.0.0 <2.0.0"
+      command:
+        - sh
+        - -c
+        - |
+          echo "Hello ${NAME}"
+      env:
+        - name: NAME
+          value: "Titus"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 10Mi
+        limits:
+          cpu: 50m
+          memory: 50Mi
+      serviceAccount:
+        create: false
